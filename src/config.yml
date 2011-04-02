@@ -1,0 +1,21 @@
+############################################
+####### ChestHarvester Configuration #######
+############################################
+
+# if true, chests will pickup drops
+AutoCollect: true
+
+# if normally unstackables should stack
+#   stacks: apples, bows, bread, pork, cookedpork, fish, cookedfish, signs, 
+#       doors, carts, saddles, snowballs, boats, eggs, cake, beds, records
+AutoStack: true
+
+
+# when a chest is clicked, should it harvest the nearby area?
+ManualHarvest: true
+harvesting:
+    range: 5
+    height: 3
+    directional: true
+    # if useBonemeal, will use any bonemeal in the chest to unfinished crops before harvesting
+    useBonemeal: true

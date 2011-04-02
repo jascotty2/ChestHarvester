@@ -1,0 +1,12 @@
+name: ChestHarvester
+main: com.jascotty2.chestharvester.ChestHarvester
+version: 1.0
+website: http://github.com/jascotty2
+author: jascotty2
+description: >
+             Turns chests into stationary farming equipment
+commands:
+  chestharvester:
+    description: Admin Commands
+    usage: /<command> [reload]
+    aliases: [ch]

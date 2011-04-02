@@ -1,0 +1,23 @@
+ChestHarvester - turns chests into stationary farming equipment
+
+
+Commands:
+/chestharvester (ch) reload	reload configuration file (OP only)
+
+
+Features:
+
+chests can collect drops within a 1-block radius
+clicking on a chest will farm the surrounding area, or in the direction the player is looking, if enabled
+supports double-chests!
+
+
+TODO:
+permissions support?
+Autoharvest, so chests run automatically?
+
+
+Changelog: 
+
+Version 1.0 - ? 
+Initial Release
