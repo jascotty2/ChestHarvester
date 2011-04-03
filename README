@@ -19,5 +19,13 @@ Autoharvest, so chests run automatically?
 
 Changelog: 
 
-Version 1.0 - ? 
+Version 1.1.1 - 4/2/11
+fixed a bug where adding an item from the head chest to the tail was being lost
+
+Version 1.1 - 4/2/11
+fixed a serious itemdrop error: when first chest is full, second half would be duplicated
+block directions decreased: will only enter a chest from beside or on top of the chest (prefers from top)
+fixed double-chests so items are deposited at the top
+
+Version 1.0 - 4/2/11
 Initial Release

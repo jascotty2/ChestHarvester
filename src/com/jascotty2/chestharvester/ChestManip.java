@@ -195,24 +195,41 @@ public class ChestManip {
         if (otherChest == null) {
             return chest.getInventory().getContents();
         } else {
-            ArrayList<ItemStack> t = new ArrayList<ItemStack>();
-            t.addAll(Arrays.asList(chest.getInventory().getContents()));
-            t.addAll(Arrays.asList(otherChest.getInventory().getContents()));
-            return t.toArray(new ItemStack[0]);
+            // return with the top portion first
+            if (otherChest.getX() < chest.getX()
+                    || otherChest.getZ() < chest.getZ()) {
+                ArrayList<ItemStack> t = new ArrayList<ItemStack>();
+                t.addAll(Arrays.asList(otherChest.getInventory().getContents()));
+                t.addAll(Arrays.asList(chest.getInventory().getContents()));
+                return t.toArray(new ItemStack[0]);
+            } else {
+                ArrayList<ItemStack> t = new ArrayList<ItemStack>();
+                t.addAll(Arrays.asList(chest.getInventory().getContents()));
+                t.addAll(Arrays.asList(otherChest.getInventory().getContents()));
+                return t.toArray(new ItemStack[0]);
+            }
         }
     }
 
     public static void setContents(Chest chest, ItemStack iss[]) {
         if (iss.length == 27) {
             chest.getInventory().setContents(iss);
-        } else {
+        } else if (iss.length == 27 * 2) {
             Chest otherChest = otherChest(chest.getBlock());
             if (otherChest == null) {
                 chest.getInventory().setContents(iss);
             } else {
-                for (int i = 0; i < 27; ++i) {
-                    chest.getInventory().setItem(i, iss[i]);
-                    otherChest.getInventory().setItem(i, iss[i + 27]);
+                if (otherChest.getX() < chest.getX()
+                        || otherChest.getZ() < chest.getZ()) {
+                    for (int i = 0; i < 27; ++i) {
+                        chest.getInventory().setItem(i, iss[i + 27]);
+                        otherChest.getInventory().setItem(i, iss[i]);
+                    }
+                } else {
+                    for (int i = 0; i < 27; ++i) {
+                        chest.getInventory().setItem(i, iss[i]);
+                        otherChest.getInventory().setItem(i, iss[i + 27]);
+                    }
                 }
             }
         }
@@ -223,10 +240,19 @@ public class ChestManip {
         if (otherChest == null) {
             chest.getInventory().addItem(is);
         } else {
-            if (!is_full(chest.getInventory().getContents(), is)) {
-                chest.getInventory().addItem(is);
-            } else {
-                otherChest.getInventory().addItem(is);
+            if (otherChest.getX() < chest.getX()
+                    || otherChest.getZ() < chest.getZ()) {
+                if (!is_full(otherChest.getInventory().getContents(), is)) {
+                    otherChest.getInventory().addItem(is);
+                } else {
+                    chest.getInventory().addItem(is);
+                }
+            } else { // if (!is_full(chest.getInventory().getContents(), is)) {
+                if (!is_full(chest.getInventory().getContents(), is)) {
+                    chest.getInventory().addItem(is);
+                } else {
+                    otherChest.getInventory().addItem(is);
+                }
             }
         }
     }
@@ -236,10 +262,19 @@ public class ChestManip {
         if (otherChest == null) {
             chest.getInventory().addItem(is);
         } else {
-            if (!is_full(chest.getInventory().getContents(), is)) {
-                chest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
-            } else {
-                otherChest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
+            if (otherChest.getX() < chest.getX()
+                    || otherChest.getZ() < chest.getZ()) {
+                if (!is_full(otherChest.getInventory().getContents(), is)) {
+                    otherChest.getInventory().setContents(putStack(otherChest.getInventory().getContents(), is));
+                } else {
+                    chest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
+                }
+            } else { // if (!is_full(chest.getInventory().getContents(), is)) {
+                if (!is_full(chest.getInventory().getContents(), is)) {
+                    chest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
+                } else {
+                    otherChest.getInventory().setContents(putStack(otherChest.getInventory().getContents(), is));
+                }
             }
         }
     }

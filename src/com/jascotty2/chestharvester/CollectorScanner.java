@@ -57,46 +57,57 @@ public class CollectorScanner extends TimerTask {
             for (Entity entity : world.getEntities()) {
                 if (entity.getClass().getName().contains("CraftItem")) {
                     Item item = (Item) entity;
+                    /*
                     Block[] blocks = {item.getLocation().getBlock().getRelative(BlockFace.SELF),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH_WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH_WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH_EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH_EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH_WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH_WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.NORTH),
+                    item.getLocation().getBlock().getRelative(BlockFace.NORTH_EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.SOUTH),
+                    item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH_EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH_EAST),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH_WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST),
+                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH_WEST)};//*/
+                    Block[] blocks = {
+                        item.getLocation().getBlock().getRelative(BlockFace.SELF),
+                        item.getLocation().getBlock().getRelative(BlockFace.DOWN),
                         item.getLocation().getBlock().getRelative(BlockFace.NORTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.NORTH_EAST),
                         item.getLocation().getBlock().getRelative(BlockFace.EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST),
                         item.getLocation().getBlock().getRelative(BlockFace.SOUTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST),
                         item.getLocation().getBlock().getRelative(BlockFace.WEST),
                         item.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH_WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH_WEST)};
-
+                        item.getLocation().getBlock().getRelative(BlockFace.NORTH_EAST),
+                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST),
+                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST)};
                     for (Block block : blocks) {
                         if (block.getType() == Material.CHEST) {
                             Chest chest = (Chest) block.getState();
                             ItemStack chestInv[] = ChestManip.getContents(chest);
 
                             if (autoStack) {
-                                if(!ChestManip.is_fullStack(chestInv, item.getItemStack())){
-                                   ChestManip.addContentsStack(chest, item.getItemStack());
-                                   item.remove();
-                                   break;
+                                if (!ChestManip.is_fullStack(chestInv, item.getItemStack())) {
+                                    ChestManip.addContentsStack(chest, item.getItemStack());
+                                    item.remove();
+                                    break;
                                 }
-                            } else if (!ChestManip.is_full(chestInv, item.getItemStack())){
+                            } else if (!ChestManip.is_full(chestInv, item.getItemStack())) {
                                 {
                                     ChestManip.addContents(chest, item.getItemStack());
                                 }
