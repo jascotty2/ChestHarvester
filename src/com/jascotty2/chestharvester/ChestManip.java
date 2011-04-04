@@ -32,7 +32,7 @@ public class ChestManip {
             279, 283, 284, 285, 286, 290, 291, 292, 293, 294, 297, 298, 299, 300,
             301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314,
             315, 316, 317, 319, 320, 322, 323, 324, 325, 326, 327, 328, 329, 330,
-            332, 333, 335, 342, 343, 344, 349, 350, 354, 355, 2256, 2257);
+            332, 333, 335, 342, 343, 344, 349, 350, 354, 355, 357, 2256, 2257);
 
     /**
      * check if this stack cannot hold one more of this item
@@ -53,6 +53,8 @@ public class ChestManip {
                     amt -= 64 - item.getAmount();
                 } else if (item.getAmount() < 16 && (item.getTypeId() == 344 || item.getTypeId() == 332)) {
                     amt -= 16 - item.getAmount();
+                } else if (item.getAmount() < 8 && item.getTypeId() == 357) {
+                    amt -= 8 - item.getAmount();
                 }
             }
         }
@@ -152,7 +154,7 @@ public class ChestManip {
             if (containsItem(chest.getInventory().getContents(), check)) {
                 chest.getInventory().setContents(removeItem(chest.getInventory().getContents(), check));
             } else {
-                otherChest.getInventory().setContents(removeItem(chest.getInventory().getContents(), check));
+                otherChest.getInventory().setContents(removeItem(otherChest.getInventory().getContents(), check));
             }
         }
     }
@@ -165,7 +167,7 @@ public class ChestManip {
             if (containsItem(chest.getInventory().getContents(), check, damage)) {
                 chest.getInventory().setContents(removeItem(chest.getInventory().getContents(), check, damage));
             } else {
-                otherChest.getInventory().setContents(removeItem(chest.getInventory().getContents(), check, damage));
+                otherChest.getInventory().setContents(removeItem(otherChest.getInventory().getContents(), check, damage));
             }
         }
     }

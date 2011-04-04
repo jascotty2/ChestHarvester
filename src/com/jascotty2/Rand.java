@@ -21,7 +21,7 @@ public class Rand {
     static String randFname() {
         return randFname(10, 25);
     }
-
+    
     static String randFname(int length) {
         return randFname(length, length);
     }

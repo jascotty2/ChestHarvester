@@ -49,8 +49,8 @@ public class CHConfig {
             chestAutoCollect = config.getBoolean("AutoCollect", chestAutoCollect);
             autoStack = config.getBoolean("AutoStack", autoStack);
             manualHarvest = config.getBoolean("ManualHarvest", manualHarvest);
-            chestScanInterval = config.getInt("AutoCollectScanInterval", (int) chestScanInterval);
-            minFarmWait = config.getInt("ManualHarvestWaitInterval", (int) minFarmWait);
+            chestScanInterval = config.getInt("AutoCollectScanInterval", (int) chestScanInterval / 1000) * 1000;
+            minFarmWait = config.getInt("ManualHarvestWaitInterval", (int) minFarmWait / 1000) * 1000;
             ConfigurationNode n = config.getNode("harvesting");
             if (n != null) {
                 directionalHarvest = n.getBoolean("directional", directionalHarvest);

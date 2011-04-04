@@ -57,34 +57,6 @@ public class CollectorScanner extends TimerTask {
             for (Entity entity : world.getEntities()) {
                 if (entity.getClass().getName().contains("CraftItem")) {
                     Item item = (Item) entity;
-                    /*
-                    Block[] blocks = {item.getLocation().getBlock().getRelative(BlockFace.SELF),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH_EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH_EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH_WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.NORTH_WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.NORTH),
-                    item.getLocation().getBlock().getRelative(BlockFace.NORTH_EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.SOUTH),
-                    item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH_EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH_EAST),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.SOUTH_WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.WEST),
-                    item.getLocation().getBlock().getRelative(BlockFace.DOWN).getRelative(BlockFace.NORTH_WEST)};//*/
                     Block[] blocks = {
                         item.getLocation().getBlock().getRelative(BlockFace.SELF),
                         item.getLocation().getBlock().getRelative(BlockFace.DOWN),

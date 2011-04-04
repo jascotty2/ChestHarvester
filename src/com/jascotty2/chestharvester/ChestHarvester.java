@@ -55,8 +55,14 @@ public class ChestHarvester extends JavaPlugin {
             } else {
                 if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
                     if (config.load()) {
+                        chestScan.cancel();
+                        chestScan = new CollectorScanner(this);
+                        if (config.chestAutoCollect) {
+                            chestScan.start(config.chestScanInterval);
+                        }
+
                         sender.sendMessage(ChatColor.AQUA.toString() + "Config Reloaded Successfully");
-                    }else{
+                    } else {
                         sender.sendMessage(ChatColor.RED.toString() + "Error loading the configuration file: check for syntax errors");
                         //Log("Error loading the configuration file: check for syntax errors");
                     }

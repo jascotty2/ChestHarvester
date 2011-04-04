@@ -187,7 +187,7 @@ public class AutoHarvester {
             }
             if (toFarm.getData() == 0x7) {//fully grown
                 int w = Rand.RandomInt(1, 2);
-                int s = Rand.RandomInt(0, 3);
+                int s = Rand.RandomInt(1, 3);
                 
                 ChestManip.addContents(source, new ItemStack(Material.WHEAT, w));
                 if (s > 0) {
