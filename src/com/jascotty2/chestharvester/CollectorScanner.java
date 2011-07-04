@@ -6,8 +6,8 @@
  */
 package com.jascotty2.chestharvester;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import com.jascotty2.ChestManip;
+import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -20,11 +20,11 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author jacob
  */
-public class CollectorScanner extends TimerTask {
+public class CollectorScanner implements Runnable {
 
     public long interval = 1000;
     public boolean autoStack = true;
-    public Timer scanTimer = null;
+    private int taskID = -1;
     ChestHarvester plugin;
 
     public CollectorScanner(ChestHarvester plugin) {
@@ -36,11 +36,17 @@ public class CollectorScanner extends TimerTask {
         start(interval);
     }
 
-    public void start(long interval) {
-        if (scanTimer == null) {
-            this.interval = interval;
-            scanTimer = new Timer();
-            scanTimer.scheduleAtFixedRate(this, 100, interval);
+    public void start(long wait) {
+        //(new Timer()).scheduleAtFixedRate(this, wait, wait);
+        // 20 ticks per second
+        this.interval = wait;
+        taskID = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 100, (wait * 20) / 1000);
+    }
+
+    public void cancel() {
+        if (taskID != -1) {
+            plugin.getServer().getScheduler().cancelTask(taskID);
+            taskID = -1;
         }
     }
 
@@ -53,45 +59,47 @@ public class CollectorScanner extends TimerTask {
      * scans for drops, then puts them into the first chest in a 1-block radius that can hold them
      */
     public void dropChestScan() {
-        for (World world : plugin.getServer().getWorlds()) {
-            for (Entity entity : world.getEntities()) {
-                if (entity.getClass().getName().contains("CraftItem")) {
-                    Item item = (Item) entity;
-                    Block[] blocks = {
-                        item.getLocation().getBlock().getRelative(BlockFace.SELF),
-                        item.getLocation().getBlock().getRelative(BlockFace.DOWN),
-                        item.getLocation().getBlock().getRelative(BlockFace.NORTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH),
-                        item.getLocation().getBlock().getRelative(BlockFace.WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST),
+        try {
+            for (World world : plugin.getServer().getWorlds()) {
+                for (Entity entity : world.getEntities()) {
+                    if (entity instanceof Item){
+                        Item item = (Item) entity;
+                        Block[] blocks = {
+                            item.getLocation().getBlock().getRelative(BlockFace.SELF),
+                            item.getLocation().getBlock().getRelative(BlockFace.DOWN),
+                            item.getLocation().getBlock().getRelative(BlockFace.NORTH),
+                            item.getLocation().getBlock().getRelative(BlockFace.EAST),
+                            item.getLocation().getBlock().getRelative(BlockFace.SOUTH),
+                            item.getLocation().getBlock().getRelative(BlockFace.WEST),
+                            /*item.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST),
                         item.getLocation().getBlock().getRelative(BlockFace.NORTH_EAST),
                         item.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST)};
-                    for (Block block : blocks) {
-                        if (block.getType() == Material.CHEST) {
-                            Chest chest = (Chest) block.getState();
-                            ItemStack chestInv[] = ChestManip.getContents(chest);
+                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST)*/};
+                        for (Block block : blocks) {
+                            if (block.getType() == Material.CHEST) {
+                                Chest chest = (Chest) block.getState();
+                                ItemStack chestInv[] = ChestManip.getContents(chest);
 
-                            if (autoStack) {
-                                if (!ChestManip.is_fullStack(chestInv, item.getItemStack())) {
-                                    ChestManip.addContentsStack(chest, item.getItemStack());
+                                if (autoStack) {
+                                    if (!ChestManip.is_fullStack(chestInv, item.getItemStack())) {
+                                        ChestManip.addContentsStack(chest, item.getItemStack());
+                                        item.remove();
+                                        break;
+                                    }
+                                } else if (!ChestManip.is_full(chestInv, item.getItemStack())) {
+                                    ChestManip.addContents(chest, item.getItemStack());
                                     item.remove();
+                                    //return;
                                     break;
                                 }
-                            } else if (!ChestManip.is_full(chestInv, item.getItemStack())) {
-                                {
-                                    ChestManip.addContents(chest, item.getItemStack());
-                                }
-                                item.remove();
-                                //return;
-                                break;
                             }
-                        }
 
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            ChestHarvester.Log(Level.SEVERE, e);
         }
     }
 } // end class CollectorScanner

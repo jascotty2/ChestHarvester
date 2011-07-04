@@ -4,7 +4,7 @@
  * Description: for manipulating the items in a chest
  * Date: Apr 2, 2011
  */
-package com.jascotty2.chestharvester;
+package com.jascotty2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,13 +20,19 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ChestManip {
 
-    // allowed to stack: apples, bows, bread, pork, cookedpork, fish, cookedfish,
-    // signs, doors, carts, saddles, snowballs, boats, eggs, cake, beds, records
+    /**
+     * list of items that do <i>not</i> stack <br />
+     * allowed to stack: apples, bows, bread, pork, cookedpork, fish, cookedfish,
+     * signs, doors, carts, saddles, snowballs, boats, eggs, cake, beds, records
+     */
     public final static List<Integer> noStack = Arrays.asList(256, 257, 258, 259,
             267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 283,
             284, 285, 286, 290, 291, 292, 293, 294, 298, 299, 300, 301, 302, 303,
             304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317,
             325, 326, 327, 335);
+    /**
+     * items that do not commonly stack
+     */
     public final static List<Integer> allNoStack = Arrays.asList(256, 257, 258, 259,
             260, 261, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278,
             279, 283, 284, 285, 286, 290, 291, 292, 293, 294, 297, 298, 299, 300,
@@ -43,7 +49,7 @@ public class ChestManip {
     public static boolean is_full(ItemStack[] items, ItemStack check) {
         int amt = check.getAmount();
         for (ItemStack item : items) {
-            if (item.getAmount() == 0
+            if (item == null || item.getAmount() == 0
                     || (item.getTypeId() == check.getTypeId()
                     && ((item.getAmount() + amt <= 64 && !allNoStack.contains(item.getTypeId()))
                     || (item.getAmount() + amt <= 16 && (item.getTypeId() == 344 || item.getTypeId() == 332))))) {
@@ -61,6 +67,34 @@ public class ChestManip {
         return true;
     }
 
+    public static boolean is_full(ItemStack[] items, Material check) {
+        return check != null ? is_full(items, check.getId()) : false;
+    }
+
+    public static boolean is_full(ItemStack[] items, int check) {
+        for (ItemStack item : items) {
+            if (item == null || item.getAmount() == 0
+                    || (item.getTypeId() == check
+                    && ((item.getAmount() + 1 <= 64 && !allNoStack.contains(item.getTypeId()))
+                    || (item.getAmount() + 1 <= 16 && (item.getTypeId() == 344 || item.getTypeId() == 332))))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean is_full(Chest items, ItemStack check) {
+        return check != null ? is_full(getContents(items), check) : false;
+    }
+
+    public static boolean is_full(Chest items, Material check) {
+        return check != null ? is_full(getContents(items), check.getId()) : false;
+    }
+
+    public static boolean is_full(Chest items, int check) {
+        return is_full(getContents(items), check);
+    }
+
     /**
      * check if this stack cannot hold one more of this item, assuming allowed to stack some unstackables
      * @param items
@@ -70,7 +104,7 @@ public class ChestManip {
     public static boolean is_fullStack(ItemStack[] items, ItemStack check) {
         int amt = check.getAmount();
         for (ItemStack item : items) {
-            if (item.getAmount() == 0
+            if (item == null || item.getAmount() == 0
                     || (item.getTypeId() == check.getTypeId()
                     && ((item.getAmount() + amt <= 64 && !noStack.contains(item.getTypeId()))))) {
                 return false;
@@ -82,9 +116,36 @@ public class ChestManip {
         return true;
     }
 
+    public static boolean is_fullStack(ItemStack[] items, Material check) {
+        return check != null ? is_fullStack(items, check.getId()) : false;
+    }
+
+    public static boolean is_fullStack(ItemStack[] items, int check) {
+        for (ItemStack item : items) {
+            if (item == null || item.getAmount() == 0
+                    || (item.getTypeId() == check
+                    && ((item.getAmount() + 1 <= 64 && !noStack.contains(item.getTypeId()))))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean is_fullStack(Chest items, ItemStack check) {
+        return check != null ? is_fullStack(getContents(items), check) : false;
+    }
+    
+    public static boolean is_fullStack(Chest items, Material check) {
+        return check != null ? is_fullStack(getContents(items), check.getId()) : false;
+    }
+
+    public static boolean is_fullStack(Chest items, int check) {
+        return is_fullStack(getContents(items), check);
+    }
+
     public static boolean containsItem(ItemStack[] items, Material check) {
         for (ItemStack item : items) {
-            if (item.getType() == check) {
+            if (item != null && item.getType() == check) {
                 return true;
             }
         }
@@ -93,7 +154,7 @@ public class ChestManip {
 
     public static boolean containsItem(ItemStack[] items, Material check, short damage) {
         for (ItemStack item : items) {
-            if (item.getType() == check && item.getDurability() == damage) {
+            if (item != null && item.getType() == check && item.getDurability() == damage) {
                 return true;
             }
         }
@@ -118,14 +179,16 @@ public class ChestManip {
 
     public static ItemStack[] removeItem(ItemStack[] items, Material check) {
         for (int i = 0; i < items.length; ++i) {
-            if (items[i].getType() == check) {
-                if (items[i].getAmount() > 1) {
-                    items[i].setAmount(items[i].getAmount() - 1);
-                } else {
-                    items[i].setAmount(0);
-                    items[i].setTypeId(0);
+            if (items[i] != null) {
+                if (items[i].getType() == check) {
+                    if (items[i].getAmount() > 1) {
+                        items[i].setAmount(items[i].getAmount() - 1);
+                    } else {
+                        items[i].setAmount(0);
+                        items[i].setTypeId(0);
+                    }
+                    return items;
                 }
-                return items;
             }
         }
         return items;
@@ -133,14 +196,16 @@ public class ChestManip {
 
     public static ItemStack[] removeItem(ItemStack[] items, Material check, short damage) {
         for (int i = 0; i < items.length; ++i) {
-            if (items[i].getType() == check && items[i].getDurability() == damage) {
-                if (items[i].getAmount() > 1) {
-                    items[i].setAmount(items[i].getAmount() - 1);
-                } else {
-                    items[i].setAmount(0);
-                    items[i].setTypeId(0);
+            if (items[i] != null) {
+                if (items[i].getType() == check && items[i].getDurability() == damage) {
+                    if (items[i].getAmount() > 1) {
+                        items[i].setAmount(items[i].getAmount() - 1);
+                    } else {
+                        items[i].setAmount(0);
+                        items[i].setTypeId(0);
+                    }
+                    return items;
                 }
-                return items;
             }
         }
         return items;
@@ -172,26 +237,47 @@ public class ChestManip {
         }
     }
 
+    /**
+     * adds an itemstack to itemstack array, allowing some nonstackables to stack <br />
+     * note: if the dest. array cannot fit any more, it will not be modified
+     * in this case, toAdd will not return with amount == 0
+     * @param items destination array
+     * @param toAdd what to add to the array <br />
+     * if successfully moved to the destination array, will have amount == 0
+     * @return the modified array
+     */
     public static ItemStack[] putStack(ItemStack[] items, ItemStack toAdd) {
-        int amt = toAdd.getAmount();
+        // first look for if there are other matching items in the chest
         for (int i = 0; i < items.length; ++i) {
-            if (items[i].getAmount() == 0) {
-                items[i] = toAdd;
-                return items;
-            } else if ((items[i].getTypeId() == toAdd.getTypeId()
-                    && ((items[i].getAmount() < 64 && !noStack.contains(toAdd.getTypeId()))))) {
-                if (64 - items[i].getAmount() >= amt) {
-                    items[i].setAmount(items[i].getAmount() + amt);
+            if (items[i] != null 
+                    && items[i].getTypeId() == toAdd.getTypeId()
+                    && (items[i].getAmount() < 64 && !noStack.contains(toAdd.getTypeId()))) {
+                if (64 - items[i].getAmount() >= toAdd.getAmount()) {
+                    items[i].setAmount(items[i].getAmount() + toAdd.getAmount());
+                    toAdd.setAmount(0);
                     return items;
                 } else {
-                    amt -= 64 - items[i].getAmount();
+                    toAdd.setAmount(64 - items[i].getAmount());
                     items[i].setAmount(64);
                 }
+            }
+        }
+        // now continue, allowing for empty slots
+        for (int i = 0; i < items.length; ++i) {
+            if (items[i] == null || items[i].getAmount() == 0) {
+                items[i] = toAdd;
+                toAdd.setAmount(0);
+                return items;
             }
         }
         return items;
     }
 
+    /**
+     * Retrieves the contents of this chest (or double-chest)
+     * @param chest chest to open
+     * @return contents of a chest or double-chest, with the upper portion first in the array
+     */
     public static ItemStack[] getContents(Chest chest) {
         Chest otherChest = otherChest(chest.getBlock());
         if (otherChest == null) {
@@ -259,20 +345,26 @@ public class ChestManip {
         }
     }
 
+    /**
+     * add the itemstack to a chest, allowing some nonstackables to stack
+     * @param chest
+     * @param is
+     */
     public static void addContentsStack(Chest chest, ItemStack is) {
         Chest otherChest = otherChest(chest.getBlock());
         if (otherChest == null) {
-            chest.getInventory().addItem(is);
+            //chest.getInventory().addItem(is);
+            chest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
         } else {
             if (otherChest.getX() < chest.getX()
                     || otherChest.getZ() < chest.getZ()) {
-                if (!is_full(otherChest.getInventory().getContents(), is)) {
+                if (!is_fullStack(otherChest.getInventory().getContents(), is)) {
                     otherChest.getInventory().setContents(putStack(otherChest.getInventory().getContents(), is));
                 } else {
                     chest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
                 }
             } else { // if (!is_full(chest.getInventory().getContents(), is)) {
-                if (!is_full(chest.getInventory().getContents(), is)) {
+                if (!is_fullStack(chest.getInventory().getContents(), is)) {
                     chest.getInventory().setContents(putStack(chest.getInventory().getContents(), is));
                 } else {
                     otherChest.getInventory().setContents(putStack(otherChest.getInventory().getContents(), is));

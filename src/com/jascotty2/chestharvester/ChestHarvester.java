@@ -33,6 +33,8 @@ public class ChestHarvester extends JavaPlugin {
             Log("Error loading the configuration file: check for syntax errors");
         }
 
+        CHPermissions.initialize(getServer());
+
         if (config.chestAutoCollect) {
             chestScan.start(config.chestScanInterval);
         }
@@ -44,6 +46,7 @@ public class ChestHarvester extends JavaPlugin {
     }
 
     public void onDisable() {
+        chestScan.cancel();
     }
 
     @Override

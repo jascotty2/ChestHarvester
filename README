@@ -11,19 +11,41 @@ chests can collect drops within a 1-block radius
 clicking on a chest will farm the surrounding area, or in the direction the player is looking, if enabled
 supports double-chests!
 
+Permissions: 
+ChestHarvester.harvest		for a user to be able to click on a chest for it to harvest 
+					(can be disabled)
+
 
 TODO:
-permissions support?
+iConomy support?
 Autoharvest, so chests run automatically?
-
+"special block" must be on to operate?
+run chests on redstone?
+make player manually set a chest for it to collect items?
 
 Changelog: 
 
-Version 1.1.2 - ?
+Version 1.2 - 7/4/11
+item scanner moved to bukkit scheduler (more thread-safe)
+removed item-collection at corners (now just the faces & top of chest)
+better harvesting permissions checks (checks if interact is canceled)
+will now stop harvesting when chest is full
+added option to require a hoe to till new ground
+corner harvesting is now optional
+can now harvest sugarcane and cactus
+fixed nonstackable stacking when there is only one chest
+fixed stacking so stacks into first matching before first empty slot
+added permission node "ChestHarvester.harvest" for the ability to run a harvester
+
+
+Version 1.1.3 - 4/8/11
+updated for 670
+
+Version 1.1.2 - 4/4/11
 fixed onCommand reload when turning on/off the chest auto pickup
 optional "AutoCollectScanInterval" and "ManualHarvestWaitInterval" changed to seconds
 now collects between 1-3 seeds, instead of 0-3
-
+fixed another double chest error: if harvesting from top with seeds in bottom, top would overwrite bottom
 
 Version 1.1.1 - 4/2/11
 fixed a bug where adding an item from the head chest to the tail was being lost

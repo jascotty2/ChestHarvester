@@ -5,6 +5,9 @@
 # if true, chests will pickup drops
 AutoCollect: true
 
+# default is 5 seconds
+AutoCollectScanInterval: 5
+
 # if normally unstackables should stack
 #   stacks: apples, bows, bread, pork, cookedpork, fish, cookedfish, signs, 
 #       doors, carts, saddles, snowballs, boats, eggs, cake, beds, records
@@ -13,9 +16,25 @@ AutoStack: true
 
 # when a chest is clicked, should it harvest the nearby area?
 ManualHarvest: true
+# min. wait before can farm again for a given chest (seconds)
+ManualHarvestWaitInterval: 2
+# if permissions are use for harvesting (ChestHarvester.harvest)
+ManualHarvestPermissions: false
 harvesting:
+    # max. distance from the chest will harvest
     range: 5
-    height: 3
+    # height is the max difference up/down from the height where the chest is
+    height: 1
+    # if harvest in the direction the player is looking
+    #   (if false, will harvest in a box around the chest)
     directional: true
+    # if directional, should corners also be a direction? (eg. north-east)
+    harvestCorners: true
     # if useBonemeal, will use any bonemeal in the chest to unfinished crops before harvesting
     useBonemeal: true
+    # if new land requires a how to till with
+    useHoe: true
+    # if should also be able to harvest sugarcane
+    harvestReeds: true
+    # if should also be able to farm cactus
+    harvestCactus: true

@@ -24,12 +24,17 @@ public class CHConfig {
     public boolean chestAutoCollect = true,
             autoStack = false,
             manualHarvest = true,
+            harvestPermission = false,
             directionalHarvest = true,
-            useBonemeal = true;
+            useBonemeal = true,
+            useHoe = true,
+            harvestCorners = true,
+            harvestReeds = true,
+            harvestCactus = true;
     public long chestScanInterval = 5000, // every 5 seconds
             minFarmWait = 2000; // min. wait before will run autofarm again for a given chest
     public int autoFarmRange = 5,
-            autoFarmHeight = 3;
+            autoFarmHeight = 1;
 
     public CHConfig(ChestHarvester plugin) {
         //pluginFolder = plugin.getDataFolder().;
@@ -49,6 +54,7 @@ public class CHConfig {
             chestAutoCollect = config.getBoolean("AutoCollect", chestAutoCollect);
             autoStack = config.getBoolean("AutoStack", autoStack);
             manualHarvest = config.getBoolean("ManualHarvest", manualHarvest);
+            harvestPermission = config.getBoolean("ManualHarvestPermissions", harvestPermission);
             chestScanInterval = config.getInt("AutoCollectScanInterval", (int) chestScanInterval / 1000) * 1000;
             minFarmWait = config.getInt("ManualHarvestWaitInterval", (int) minFarmWait / 1000) * 1000;
             ConfigurationNode n = config.getNode("harvesting");
@@ -57,6 +63,10 @@ public class CHConfig {
                 useBonemeal = n.getBoolean("useBonemeal", useBonemeal);
                 autoFarmRange = n.getInt("range", autoFarmRange);
                 autoFarmHeight = n.getInt("height", autoFarmHeight);
+                useHoe = n.getBoolean("useHoe", useHoe);
+                harvestCorners = n.getBoolean("harvestCorners", harvestCorners);
+                harvestReeds = n.getBoolean("harvestReeds", harvestReeds);
+                harvestCactus = n.getBoolean("harvestCactus", harvestCactus);
             }
             return true;
         } catch (Exception ex) {

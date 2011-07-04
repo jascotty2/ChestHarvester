@@ -1,7 +1,7 @@
 name: ChestHarvester
 main: com.jascotty2.chestharvester.ChestHarvester
-version: 1.1.2
-website: http://github.com/jascotty2
+version: 1.2 alpha
+website: https://github.com/jascotty2/ChestHarvester/
 author: jascotty2
 description: >
              Turns chests into stationary farming equipment

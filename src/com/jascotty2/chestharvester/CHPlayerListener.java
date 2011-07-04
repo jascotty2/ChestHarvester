@@ -25,13 +25,17 @@ public class CHPlayerListener extends PlayerListener {
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK
+        if (!event.isCancelled()
+                && event.getAction() == Action.LEFT_CLICK_BLOCK
                 && plugin.config.manualHarvest
                 && event.getClickedBlock().getType() == Material.CHEST) {
-            if(plugin.config.directionalHarvest){
-                plugin.harvester.autoFarm(event.getPlayer(), (Chest)event.getClickedBlock().getState());
-            }else{
-                plugin.harvester.autoFarm((Chest)event.getClickedBlock().getState());
+            if (!plugin.config.harvestPermission
+                    || CHPermissions.permission(event.getPlayer(), "ChestHarvester.harvest")) {
+                if (plugin.config.directionalHarvest) {
+                    plugin.harvester.autoFarm(event.getPlayer(), (Chest) event.getClickedBlock().getState());
+                } else {
+                    plugin.harvester.autoFarm((Chest) event.getClickedBlock().getState());
+                }
             }
         }
     }
