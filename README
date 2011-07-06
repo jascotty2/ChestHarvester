@@ -7,9 +7,13 @@ Commands:
 
 Features:
 
-chests can collect drops within a 1-block radius
+chests can collect drops within a 1-block radius on the faces or from the top
 clicking on a chest will farm the surrounding area, or in the direction the player is looking, if enabled
 supports double-chests!
+to minimize server strain, scans every 5 seconds & only allows farming every 2
+(this can be changed with "AutoCollectScanInterval" and "ManualHarvestWaitInterval" in the config)
+can be set to use a hoe to till new farmland
+can harvest sugarcane & cactus, not just farmland :)
 
 Permissions: 
 ChestHarvester.harvest		for a user to be able to click on a chest for it to harvest 

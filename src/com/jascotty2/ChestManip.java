@@ -265,7 +265,7 @@ public class ChestManip {
         // now continue, allowing for empty slots
         for (int i = 0; i < items.length; ++i) {
             if (items[i] == null || items[i].getAmount() == 0) {
-                items[i] = toAdd;
+                items[i] = toAdd.clone();
                 toAdd.setAmount(0);
                 return items;
             }
