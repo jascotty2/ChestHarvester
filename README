@@ -29,7 +29,15 @@ make player manually set a chest for it to collect items?
 
 Changelog: 
 
-Version 1.2 - 7/4/11
+Version 1.2.1 - ?
+compatibility with BetterShop chest shops
+- won't absorb into chest shops
+added option for disabling on defined worlds
+
+Version 1.2 - 7/5/11
+fixed new items stacking added as 0 (which were then removed)
+
+Version 1.2 'alpha' - 7/4/11
 item scanner moved to bukkit scheduler (more thread-safe)
 removed item-collection at corners (now just the faces & top of chest)
 better harvesting permissions checks (checks if interact is canceled)

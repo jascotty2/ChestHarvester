@@ -13,6 +13,10 @@ AutoCollectScanInterval: 5
 #       doors, carts, saddles, snowballs, boats, eggs, cake, beds, records
 AutoStack: true
 
+# for collecting or harvesting, what worlds (if any)
+#			will not be scanned
+#			(comma-delimited, case insensitive)
+disabledWorlds: 
 
 # when a chest is clicked, should it harvest the nearby area?
 ManualHarvest: true

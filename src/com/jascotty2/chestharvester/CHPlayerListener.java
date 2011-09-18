@@ -29,6 +29,10 @@ public class CHPlayerListener extends PlayerListener {
                 && event.getAction() == Action.LEFT_CLICK_BLOCK
                 && plugin.config.manualHarvest
                 && event.getClickedBlock().getType() == Material.CHEST) {
+			String w = event.getClickedBlock().getWorld().getName().toLowerCase();
+			if(plugin.config.disabledWorlds.contains(w)){
+				return;
+			}
             if (!plugin.config.harvestPermission
                     || CHPermissions.permission(event.getPlayer(), "ChestHarvester.harvest")) {
                 if (plugin.config.directionalHarvest) {

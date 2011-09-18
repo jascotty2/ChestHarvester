@@ -9,6 +9,7 @@ package com.jascotty2.chestharvester;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.util.config.ConfigurationNode;
@@ -35,6 +36,7 @@ public class CHConfig {
             minFarmWait = 2000; // min. wait before will run autofarm again for a given chest
     public int autoFarmRange = 5,
             autoFarmHeight = 1;
+	protected ArrayList<String> disabledWorlds = new ArrayList<String>();
 
     public CHConfig(ChestHarvester plugin) {
         //pluginFolder = plugin.getDataFolder().;
@@ -68,6 +70,16 @@ public class CHConfig {
                 harvestReeds = n.getBoolean("harvestReeds", harvestReeds);
                 harvestCactus = n.getBoolean("harvestCactus", harvestCactus);
             }
+			disabledWorlds.clear();
+			String wlds = config.getString("disabledWorlds");
+			if(wlds != null){
+				for(String w : wlds.split(",")){
+					w = w.trim().toLowerCase();
+					if(!w.isEmpty()){
+						disabledWorlds.add(w);
+					}
+				}
+			}
             return true;
         } catch (Exception ex) {
         }

@@ -8,10 +8,12 @@ package com.jascotty2.chestharvester;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.jascotty2.bettershop.BetterShop;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,6 +28,7 @@ public class ChestHarvester extends JavaPlugin {
     CollectorScanner chestScan = new CollectorScanner(this);
     AutoHarvester harvester = new AutoHarvester(this);
     CHPlayerListener playerListener = new CHPlayerListener(this);
+	protected BetterShop betterShopPlugin = null;
 
     public void onEnable() {
 
@@ -38,6 +41,11 @@ public class ChestHarvester extends JavaPlugin {
         if (config.chestAutoCollect) {
             chestScan.start(config.chestScanInterval);
         }
+		
+		Plugin bs = getServer().getPluginManager().getPlugin("BetterShop");
+		if(bs instanceof BetterShop){
+			betterShopPlugin = (BetterShop) bs;
+		}
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Highest, this);

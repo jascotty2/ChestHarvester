@@ -8,6 +8,7 @@ package com.jascotty2.chestharvester;
 
 import com.jascotty2.ChestManip;
 import java.util.logging.Level;
+import me.jascotty2.bettershop.BetterShop;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -61,6 +62,10 @@ public class CollectorScanner implements Runnable {
     public void dropChestScan() {
         try {
             for (World world : plugin.getServer().getWorlds()) {
+				String w = world.getName().toLowerCase();
+				if(plugin.config.disabledWorlds.contains(w)){
+					continue;
+				}
                 for (Entity entity : world.getEntities()) {
                     if (entity instanceof Item){
                         Item item = (Item) entity;
@@ -77,6 +82,13 @@ public class CollectorScanner implements Runnable {
                         item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST)*/};
                         for (Block block : blocks) {
                             if (block.getType() == Material.CHEST) {
+								if(plugin.betterShopPlugin != null
+										&& BetterShop.getConfig().chestShopEnabled
+										&& BetterShop.getChestShop() != null
+										&& BetterShop.getChestShop().hasChestShop(block)){
+									continue;
+								}
+
                                 Chest chest = (Chest) block.getState();
                                 ItemStack chestInv[] = ChestManip.getContents(chest);
 
