@@ -1,12 +1,23 @@
 /**
- * Programmer: Jacob Scott
- * Program Name: SRPermissions
- * Description:
- * Date: Jul 4, 2011
+ * Copyright (C) 2011 Jacob Scott <jascottytechie@gmail.com>
+ * Description: permissions handler
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.jascotty2.chestharvester;
 
+import com.jascotty2.Str;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,9 +26,6 @@ import java.util.logging.Level;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import org.anjocaido.groupmanager.GroupManager;
 
-/**
- * @author jacob
- */
 public class CHPermissions {
 
     private enum PermissionHandler {
@@ -44,7 +52,7 @@ public class CHPermissions {
             ChestHarvester.Log("Permissions enabled using: Permissions v" + version);
         } else {
             handler = PermissionHandler.NONE;
-            ChestHarvester.Log("No permission plugin loaded.");
+            //ChestHarvester.Log("No permission plugin loaded.");
         }
     }
 
@@ -55,17 +63,33 @@ public class CHPermissions {
                     return ((Permissions) permissionPlugin).getHandler().has(player, permission);
                 case GROUP_MANAGER:
                     return ((GroupManager) permissionPlugin).getWorldsHolder().getWorldPermissions(player).has(player, permission);
-                case NONE:
-                    return true;
                 default:
-                    return true;
+                    if (player == null || player.isOp() || !(player instanceof Player) // ops override permission check (double-check is a Player)
+                            || permission == null || permission.length() == 0) {
+                        return true;
+                    }
+                    return has((Player) player, permission);
             }
         } catch (Exception ex) {
             if (!permErr) {
-                ChestHarvester.Log(Level.SEVERE, "Unexpected Error checking permission: defaulting to true", ex);
+                ChestHarvester.Log(Level.SEVERE, "Unexpected Error checking permission: defaulting to builtin", ex);
                 permErr = true;
             }
             return true;
         }
+    }
+
+    public static boolean has(Player player, String node) {
+        try {
+            if (player.hasPermission(node)) {
+                return true;
+            } else if (!node.contains("*") && Str.count(node, '.') >= 2) {
+                return player.hasPermission(node.substring(0, node.lastIndexOf('.') + 1) + "*");
+            }
+            return false;
+        } catch (Exception e) {
+            ChestHarvester.Log(Level.SEVERE, "Error checking permission..", e);
+        }
+        return false;
     }
 } // end class SRPermissions

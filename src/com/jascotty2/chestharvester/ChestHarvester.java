@@ -1,8 +1,19 @@
 /**
- * Programmer: Jacob Scott
- * Program Name: ChestHarvester
+ * Copyright (C) 2011 Jacob Scott <jascottytechie@gmail.com>
  * Description: turns chests into stationary farming equipment
- * Date: Apr 2, 2011
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jascotty2.chestharvester;
 
@@ -12,18 +23,12 @@ import me.jascotty2.bettershop.BetterShop;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * @author jacob
- */
 public class ChestHarvester extends JavaPlugin {
 
-    protected final static Logger logger = Logger.getLogger("Minecraft");
-    public static final String name = "ChestHarvester";
+    protected static Logger logger = null;
     CHConfig config = new CHConfig(this);
     CollectorScanner chestScan = new CollectorScanner(this);
     AutoHarvester harvester = new AutoHarvester(this);
@@ -31,6 +36,8 @@ public class ChestHarvester extends JavaPlugin {
 	protected BetterShop betterShopPlugin = null;
 
     public void onEnable() {
+        
+        logger = getLogger();
 
         if (!config.load()) {
             Log("Error loading the configuration file: check for syntax errors");
@@ -43,12 +50,11 @@ public class ChestHarvester extends JavaPlugin {
         }
 		
 		Plugin bs = getServer().getPluginManager().getPlugin("BetterShop");
-		if(bs instanceof BetterShop){
+		if(bs instanceof BetterShop && !bs.getDescription().getVersion().equals("2.0.3")){
 			betterShopPlugin = (BetterShop) bs;
 		}
 
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Highest, this);
+        getServer().getPluginManager().registerEvents(playerListener, this);
 
         Log("Version " + this.getDescription().getVersion() + " enabled");
     }
@@ -86,27 +92,23 @@ public class ChestHarvester extends JavaPlugin {
     }
 
     public static void Log(String txt) {
-        logger.log(Level.INFO, String.format("[%s] %s", name, txt));
+        logger.log(Level.INFO, txt);
     }
 
     public static void Log(Level loglevel, String txt) {
-        Log(loglevel, txt, true);
+        logger.log(loglevel, txt);
     }
 
-    public static void Log(Level loglevel, String txt, boolean sendReport) {
-        logger.log(loglevel, String.format("[%s] %s", name, txt == null ? "" : txt));
-    }
-
-    public static void Log(Level loglevel, String txt, Exception params) {
+    public static void Log(Level loglevel, String txt, Throwable err) {
         if (txt == null) {
-            Log(loglevel, params);
+            Log(loglevel, err);
         } else {
-            logger.log(loglevel, String.format("[%s] %s", name, txt == null ? "" : txt), (Exception) params);
+            logger.log(loglevel, txt, err);
         }
     }
 
-    public static void Log(Level loglevel, Exception err) {
-        logger.log(loglevel, String.format("[%s] %s", name, err == null ? "? unknown exception ?" : err.getMessage()), err);
+    public static void Log(Level loglevel, Throwable err) {
+        logger.log(loglevel, err == null ? "? unknown exception ?" : err.getMessage(), err);
     }
 } // end class ChestHarvester
 
