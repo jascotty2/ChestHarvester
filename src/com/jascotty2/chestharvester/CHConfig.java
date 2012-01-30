@@ -39,11 +39,14 @@ public class CHConfig {
             useHoe = true,
             harvestCorners = true,
             harvestReeds = true,
-            harvestCactus = true;
+            harvestCactus = true,
+            allDirections = false,
+            storageCartsCollect = false;
     public long chestScanInterval = 5000, // every 5 seconds
             minFarmWait = 2000; // min. wait before will run autofarm again for a given chest
     public int autoFarmRange = 5,
-            autoFarmHeight = 1;
+            autoFarmHeight = 1,
+            scanRange = 1;
 	protected ArrayList<String> disabledWorlds = new ArrayList<String>();
 
     public CHConfig(ChestHarvester plugin) {
@@ -62,6 +65,9 @@ public class CHConfig {
             Configuration config = new Configuration(configFile);
             config.load();
             chestAutoCollect = config.getBoolean("AutoCollect", chestAutoCollect);
+            allDirections = config.getBoolean("scanFull", allDirections);
+            scanRange = config.getInt("scanDistance", scanRange);
+            storageCartsCollect = config.getBoolean("storageCartsCollect", storageCartsCollect);
             autoStack = config.getBoolean("AutoStack", autoStack);
             manualHarvest = config.getBoolean("ManualHarvest", manualHarvest);
             harvestPermission = config.getBoolean("ManualHarvestPermissions", harvestPermission);

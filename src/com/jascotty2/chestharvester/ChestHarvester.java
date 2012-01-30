@@ -33,10 +33,10 @@ public class ChestHarvester extends JavaPlugin {
     CollectorScanner chestScan = new CollectorScanner(this);
     AutoHarvester harvester = new AutoHarvester(this);
     CHPlayerListener playerListener = new CHPlayerListener(this);
-	protected BetterShop betterShopPlugin = null;
+    protected BetterShop betterShopPlugin = null;
 
     public void onEnable() {
-        
+
         logger = getLogger();
 
         if (!config.load()) {
@@ -48,11 +48,11 @@ public class ChestHarvester extends JavaPlugin {
         if (config.chestAutoCollect) {
             chestScan.start(config.chestScanInterval);
         }
-		
-		Plugin bs = getServer().getPluginManager().getPlugin("BetterShop");
-		if(bs instanceof BetterShop && !bs.getDescription().getVersion().equals("2.0.3")){
-			betterShopPlugin = (BetterShop) bs;
-		}
+
+        Plugin bs = getServer().getPluginManager().getPlugin("BetterShop");
+        if (bs instanceof BetterShop && !bs.getDescription().getVersion().equals("2.0.3")) {
+            betterShopPlugin = (BetterShop) bs;
+        }
 
         getServer().getPluginManager().registerEvents(playerListener, this);
 

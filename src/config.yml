@@ -8,6 +8,17 @@ AutoCollect: true
 # default is 5 seconds
 AutoCollectScanInterval: 5
 
+# if true, scans in a full box area for chests
+# false scans sides & top
+scanFull: false 
+
+# range from 1 - 3
+# (1 is fastest, 3 takes more load to process)
+scanDistance: 1
+
+# if storage minecarts should colleact, too
+storageCartsCollect: false
+
 # if normally unstackables should stack
 #   stacks: apples, bows, bread, pork, cookedpork, fish, cookedfish, signs, 
 #       doors, carts, saddles, snowballs, boats, eggs, cake, beds, records

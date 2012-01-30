@@ -29,10 +29,16 @@ make player manually set a chest for it to collect items?
 
 Changelog: 
 
-Version 1.2.1 - ?
+Version 1.3 - 1/30/12
 compatibility with BetterShop chest shops
 - won't absorb into chest shops
 added option for disabling on defined worlds
+rewrote how the items are collected: now 130% faster
+added option to define scan distance (larger values are slower.. use at own discretion)
+added option to scan in a box-area, not just top & sides
+added option to allow Storage Minecarts to pickup items 
+- however, range not restricted by scanFull: false, so can pickup underneath tracks if range >= 2
+
 
 Version 1.2 - 7/5/11
 fixed new items stacking added as 0 (which were then removed)

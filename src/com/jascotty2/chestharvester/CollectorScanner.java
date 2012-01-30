@@ -18,6 +18,10 @@
 package com.jascotty2.chestharvester;
 
 import com.jascotty2.ChestManip;
+import com.jascotty2.ItemStackManip;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import me.jascotty2.bettershop.BetterShop;
 import org.bukkit.Material;
@@ -27,6 +31,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.ItemStack;
 
 public class CollectorScanner implements Runnable {
@@ -61,7 +66,9 @@ public class CollectorScanner implements Runnable {
 
     @Override
     public void run() {
+//        long st = System.currentTimeMillis();
         dropChestScan();
+//        System.out.println("scan latency: " + (System.currentTimeMillis() - st));
     }
 
     /**
@@ -69,58 +76,124 @@ public class CollectorScanner implements Runnable {
      */
     public void dropChestScan() {
         try {
+//            int mvd = 0;
+            Map<Block, ItemStack[]> chests = new HashMap<Block, ItemStack[]>();
             for (World world : plugin.getServer().getWorlds()) {
-				String w = world.getName().toLowerCase();
-				if(plugin.config.disabledWorlds.contains(w)){
-					continue;
-				}
-                for (Entity entity : world.getEntities()) {
-                    if (entity instanceof Item){
-                        Item item = (Item) entity;
-                        Block[] blocks = {
-                            item.getLocation().getBlock().getRelative(BlockFace.SELF),
-                            item.getLocation().getBlock().getRelative(BlockFace.DOWN),
-                            item.getLocation().getBlock().getRelative(BlockFace.NORTH),
-                            item.getLocation().getBlock().getRelative(BlockFace.EAST),
-                            item.getLocation().getBlock().getRelative(BlockFace.SOUTH),
-                            item.getLocation().getBlock().getRelative(BlockFace.WEST),
-                            /*item.getLocation().getBlock().getRelative(BlockFace.NORTH_WEST),
-                        item.getLocation().getBlock().getRelative(BlockFace.NORTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_EAST),
-                        item.getLocation().getBlock().getRelative(BlockFace.SOUTH_WEST)*/};
-                        for (Block block : blocks) {
-                            if (block.getType() == Material.CHEST) {
-								if(plugin.betterShopPlugin != null
-										&& BetterShop.getSettings().chestShopEnabled
-										&& BetterShop.getChestShop() != null
-										&& BetterShop.getChestShop().hasChestShop(block)){
-									continue;
-								}
-
-                                Chest chest = (Chest) block.getState();
-                                ItemStack chestInv[] = ChestManip.getContents(chest);
-
-                                if (autoStack) {
-                                    if (!ChestManip.is_fullStack(chestInv, item.getItemStack())) {
-                                        ChestManip.addContentsStack(chest, item.getItemStack());
-                                        item.remove();
-                                        break;
-                                    }
-                                } else if (!ChestManip.is_full(chestInv, item.getItemStack())) {
-                                    ChestManip.addContents(chest, item.getItemStack());
-                                    item.remove();
-                                    //return;
-                                    break;
-                                }
+                String w = world.getName().toLowerCase();
+                if (plugin.config.disabledWorlds.contains(w)) {
+                    continue;
+                }
+                for (Item item : world.getEntitiesByClass(Item.class)) {
+                    for (Block block : getScanBlocks(item.getLocation().getBlock())) {
+                        if (block.getType() == Material.CHEST) {
+                            if (plugin.betterShopPlugin != null
+                                    && BetterShop.getSettings().chestShopEnabled
+                                    && BetterShop.getChestShop() != null
+                                    && BetterShop.getChestShop().hasChestShop(block)) {
+                                continue;
                             }
+                            ItemStack is[] = chests.get(block);
+                            if (is == null) {
+                                is = ChestManip.getContents((Chest) block.getState());
+                                chests.put(block, is);
+                            }
+//                            mvd += item.getItemStack().getAmount();
+                            ItemStack no = ItemStackManip.add(is, item.getItemStack(), autoStack);
+                            if (no.getAmount() == 0) {
+                                item.remove();
+                            } else {
+                                item.setItemStack(no);
+                                // mvd -= no.getAmount();
+                            }
+                            break;
 
                         }
+
                     }
                 }
             }
+            for (Map.Entry<Block, ItemStack[]> c : chests.entrySet()) {
+                ChestManip.setContents((Chest) c.getKey().getState(), c.getValue());
+            }
+
+            if (plugin.config.storageCartsCollect) {
+                Map<StorageMinecart, ItemStack[]> carts = new HashMap<StorageMinecart, ItemStack[]>();
+                for (World world : plugin.getServer().getWorlds()) {
+                    String w = world.getName().toLowerCase();
+                    if (plugin.config.disabledWorlds.contains(w)) {
+                        continue;
+                    }
+                    for (StorageMinecart ch : world.getEntitiesByClass(StorageMinecart.class)) {
+                        for (Entity item : ch.getNearbyEntities(plugin.config.scanRange * 2, 
+                                plugin.config.scanRange * 2, plugin.config.scanRange * 2)) {
+                            if(item instanceof Item) {
+                                ItemStack[] inv = carts.get(ch);
+                                if(inv == null) {
+                                    inv = ch.getInventory().getContents();
+                                    carts.put(ch, inv);
+                                }
+//                               mvd += ((Item)item).getItemStack().getAmount();
+                                ItemStack no = ItemStackManip.add(inv, ((Item)item).getItemStack(), autoStack);
+                                if (no.getAmount() == 0) {
+                                    item.remove();
+                                } else {
+                                    ((Item)item).setItemStack(no);
+                                    // mvd -= no.getAmount();
+                                }
+                            }
+                        }
+                    }
+                    for (Map.Entry<StorageMinecart, ItemStack[]> c : carts.entrySet()) {
+                        c.getKey().getInventory().setContents(c.getValue());
+                    }
+                }
+            }
+//            System.out.println(mvd + " collected");
         } catch (Exception e) {
             ChestHarvester.Log(Level.SEVERE, e);
         }
     }
-} // end class CollectorScanner
 
+    public Block[] getScanBlocks(Block b) {
+        if ((plugin.config.scanRange <= 1 || plugin.config.scanRange > 3)) {
+            return plugin.config.allDirections
+                    ? new Block[]{
+                        b,
+                        b.getRelative(BlockFace.DOWN),
+                        b.getRelative(BlockFace.NORTH),
+                        b.getRelative(BlockFace.EAST),
+                        b.getRelative(BlockFace.SOUTH),
+                        b.getRelative(BlockFace.WEST),
+                        b.getRelative(BlockFace.UP),
+                        b.getRelative(BlockFace.NORTH_WEST),
+                        b.getRelative(BlockFace.NORTH_EAST),
+                        b.getRelative(BlockFace.SOUTH_EAST),
+                        b.getRelative(BlockFace.SOUTH_WEST)}
+                    : new Block[]{
+                        b,
+                        b.getRelative(BlockFace.DOWN),
+                        b.getRelative(BlockFace.NORTH),
+                        b.getRelative(BlockFace.EAST),
+                        b.getRelative(BlockFace.SOUTH),
+                        b.getRelative(BlockFace.WEST)};
+        } else {
+            ArrayList<Block> blocks = new ArrayList<Block>();
+            for (int x = -plugin.config.scanRange;
+                    x <= plugin.config.scanRange; ++x) {
+                for (int z = -plugin.config.scanRange;
+                        z <= plugin.config.scanRange; ++z) {
+                    for (int y = -plugin.config.scanRange;
+                            y <= (plugin.config.allDirections ? plugin.config.scanRange : 0); ++y) {
+                        Block ab = b.getRelative(x, y, z);
+                        if (plugin.config.allDirections) {
+                            blocks.add(ab);
+                        } else if (b.getLocation().distance(ab.getLocation()) <= plugin.config.scanRange) {
+                            blocks.add(ab);
+                        }
+                    }
+                }
+            }
+            return blocks.toArray(new Block[0]);
+        }
+    }
+} // end class CollectorScanner
