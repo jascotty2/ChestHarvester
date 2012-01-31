@@ -54,7 +54,14 @@ harvesting:
     # if seeds are replanted after harvesting
     # (if false, also disables tilling)
     replant: true
-    # if should also be able to harvest sugarcane
+    # if should be able to harvest wheat
+    # (if false, also disables tilling)
+    harvestWheat: true
+    # if should be able to harvest sugarcane
     harvestReeds: true
-    # if should also be able to farm cactus
+    # if should be able to harvest cactus
     harvestCactus: true
+    # if should be able to harvest pumpkins
+    harvestPumpkins: true
+    # if should be able to harvest melons
+    harvestMelons: true

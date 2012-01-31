@@ -40,8 +40,11 @@ public class CHConfig {
             useHoe = true,
             replant = true, 
             harvestCorners = true,
+            harvestWheat = true, 
             harvestReeds = true,
             harvestCactus = true,
+            harvestPumpkins = true,
+            harvestMelons = true,
             allDirections = false,
             storageCartsCollect = false;
     public long chestScanInterval = 5000, // every 5 seconds
@@ -85,8 +88,11 @@ public class CHConfig {
                 harvestCorners = n.getBoolean("harvestCorners", harvestCorners);
                 replant = n.getBoolean("replant", replant);
                 autotill = n.getBoolean("autotill", autotill);
+                harvestWheat = n.getBoolean("harvestWheat", harvestWheat);
                 harvestReeds = n.getBoolean("harvestReeds", harvestReeds);
                 harvestCactus = n.getBoolean("harvestCactus", harvestCactus);
+                harvestPumpkins = n.getBoolean("harvestPumpkins", harvestPumpkins);
+                harvestMelons = n.getBoolean("harvestMelons", harvestMelons);
             }
 			disabledWorlds.clear();
 			String wlds = config.getString("disabledWorlds");

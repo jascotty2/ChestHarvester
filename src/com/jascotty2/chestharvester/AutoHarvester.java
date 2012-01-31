@@ -256,30 +256,32 @@ public class AutoHarvester {
     void farmBlock(Chest source, Block toFarm) {
         int id = toFarm.getTypeId();
         if (id == Material.CROPS.getId()) {
-            if (plugin.config.useBonemeal && toFarm.getData() != 0x7
-                    && ChestManip.containsItem(source, Material.INK_SACK, (short) 15)) {
-                toFarm.setData((byte) 7);
-                ChestManip.removeItem(source, Material.INK_SACK, (short) 15);
-            }
-            if (toFarm.getData() == 0x7 //fully grown
-                    && !ChestManip.is_full(source, Material.WHEAT)
-                    && !ChestManip.is_full(source, Material.SEEDS)) {
-                int w = Rand.RandomInt(1, 2);
-                int s = Rand.RandomInt(1, 3);
-
-                ChestManip.addContents(source, new ItemStack(Material.WHEAT, w));
-                if (s > 0) {
-                    ChestManip.addContents(source, new ItemStack(Material.SEEDS, s));
+            if(plugin.config.harvestWheat) {
+                if (plugin.config.useBonemeal && toFarm.getData() != 0x7
+                        && ChestManip.containsItem(source, Material.INK_SACK, (short) 15)) {
+                    toFarm.setData((byte) 7);
+                    ChestManip.removeItem(source, Material.INK_SACK, (short) 15);
                 }
-                toFarm.setTypeId(0);
+                if (toFarm.getData() == 0x7 //fully grown
+                        && !ChestManip.is_full(source, Material.WHEAT)
+                        && !ChestManip.is_full(source, Material.SEEDS)) {
+                    int w = Rand.RandomInt(1, 2);
+                    int s = Rand.RandomInt(1, 3);
 
-                // now replant
-                if (plugin.config.replant && ChestManip.containsItem(source, Material.SEEDS)) {
-                    toFarm.setTypeId(Material.CROPS.getId());
-                    ChestManip.removeItem(source, Material.SEEDS);
+                    ChestManip.addContents(source, new ItemStack(Material.WHEAT, w));
+                    if (s > 0) {
+                        ChestManip.addContents(source, new ItemStack(Material.SEEDS, s));
+                    }
+                    toFarm.setTypeId(0);
+
+                    // now replant
+                    if (plugin.config.replant && ChestManip.containsItem(source, Material.SEEDS)) {
+                        toFarm.setTypeId(Material.CROPS.getId());
+                        ChestManip.removeItem(source, Material.SEEDS);
+                    }
                 }
             }
-        } else if (plugin.config.replant && plugin.config.autotill
+        } else if (plugin.config.replant && plugin.config.autotill && plugin.config.harvestWheat
                 && (id == 2 || id == 3 || id == 60)
                 && toFarm.getRelative(BlockFace.UP).getTypeId() == 0
                 && ChestManip.containsItem(source, Material.SEEDS)) {
@@ -306,9 +308,9 @@ public class AutoHarvester {
             toFarm.setTypeId(60);
             toFarm.getRelative(BlockFace.UP).setTypeId(Material.CROPS.getId());
             ChestManip.removeItem(source, Material.SEEDS);
-        } else if (plugin.config.harvestReeds
-                && id == Material.SUGAR_CANE_BLOCK.getId()) {
-            if (toFarm.getRelative(BlockFace.DOWN).getTypeId() == Material.SUGAR_CANE_BLOCK.getId()
+        } else if (id == Material.SUGAR_CANE_BLOCK.getId()) {
+            if (plugin.config.harvestReeds
+                    && toFarm.getRelative(BlockFace.DOWN).getTypeId() == Material.SUGAR_CANE_BLOCK.getId()
                     && !ChestManip.is_full(source, Material.SUGAR_CANE)) {
 
                 ChestManip.addContents(source, new ItemStack(Material.SUGAR_CANE, 1));
@@ -319,9 +321,9 @@ public class AutoHarvester {
                     toFarm.setTypeIdAndData(0, (byte) 0, false);
                 }
             }
-        } else if (plugin.config.harvestCactus
-                && id == Material.CACTUS.getId()) {
-            if (toFarm.getRelative(BlockFace.DOWN).getTypeId() == Material.CACTUS.getId()
+        } else if (id == Material.CACTUS.getId()) {
+            if (plugin.config.harvestCactus
+                    && toFarm.getRelative(BlockFace.DOWN).getTypeId() == Material.CACTUS.getId()
                     && !ChestManip.is_full(source, Material.CACTUS)) {
                 ChestManip.addContents(source, new ItemStack(Material.CACTUS, 1));
                 toFarm.setTypeIdAndData(0, (byte) 0, false);//toFarm.setTypeId(0);
@@ -330,6 +332,18 @@ public class AutoHarvester {
                     ChestManip.addContents(source, new ItemStack(Material.CACTUS, 1));
                     toFarm.setTypeIdAndData(0, (byte) 0, false);
                 }
+            }
+        } else if (id == Material.PUMPKIN.getId()) {
+            if (plugin.config.harvestPumpkins
+                    && !ChestManip.is_full(source, Material.PUMPKIN)) {
+                ChestManip.addContents(source, new ItemStack(Material.PUMPKIN, 1));
+                toFarm.setTypeIdAndData(0, (byte) 0, true);
+            }
+        } else if (id == Material.MELON_BLOCK.getId()) {
+            if (plugin.config.harvestMelons 
+                    && !ChestManip.is_full(source, Material.MELON_BLOCK)) {
+                ChestManip.addContents(source, new ItemStack(Material.MELON, Rand.RandomInt(3, 7)));
+                toFarm.setTypeId(0);
             }
         }
     }
