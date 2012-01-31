@@ -36,7 +36,9 @@ public class CHConfig {
             harvestPermission = false,
             directionalHarvest = true,
             useBonemeal = true,
+            autotill = true,
             useHoe = true,
+            replant = true, 
             harvestCorners = true,
             harvestReeds = true,
             harvestCactus = true,
@@ -81,6 +83,8 @@ public class CHConfig {
                 autoFarmHeight = n.getInt("height", autoFarmHeight);
                 useHoe = n.getBoolean("useHoe", useHoe);
                 harvestCorners = n.getBoolean("harvestCorners", harvestCorners);
+                replant = n.getBoolean("replant", replant);
+                autotill = n.getBoolean("autotill", autotill);
                 harvestReeds = n.getBoolean("harvestReeds", harvestReeds);
                 harvestCactus = n.getBoolean("harvestCactus", harvestCactus);
             }

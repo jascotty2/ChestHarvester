@@ -44,26 +44,18 @@ public class AutoHarvester {
 
     public void autoFarm(Chest chestBlock) {
         Block bl = chestBlock.getBlock();
-        
+
         if (!farmTimes.containsKey(bl.getLocation())
                 || System.currentTimeMillis() - farmTimes.get(bl.getLocation()) > plugin.config.chestScanInterval) {
             farmTimes.put(bl.getLocation(), System.currentTimeMillis());
-            //ItemStack items[] = ChestManip.getContents(chestBlock);
-            //Location loc = bl.getLocation().clone();
+
             int x = bl.getLocation().getBlockX();
             int y = bl.getLocation().getBlockY();
             int z = bl.getLocation().getBlockZ();
-            /*
-            for (int dx = -range; dx <= range; ++dx) {
-            for (int dy = range; dy > -range; --dy) {
-            for (int dz = -range; dz <= range; ++dz) {
-            farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
-            }
-            }
-            }*/
+            //do {
             for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                 for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                    for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                    for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                         farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                         farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
                         farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z - dz));
@@ -71,6 +63,7 @@ public class AutoHarvester {
                     }
                 }
             }
+            //} while (ChestManip.containsItem(chestBlock, Material.INK_SACK, (short) 15));
         }
     }
 
@@ -122,12 +115,12 @@ public class AutoHarvester {
                     harvestDir = DIRECTION.WEST;
                 }
             }
-
+            // do {
 
             if (harvestDir == DIRECTION.NORTH) { // North: ++x
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z - dz));
@@ -141,7 +134,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.EAST) { //East: --z
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z - dz));
@@ -155,7 +148,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.SOUTH) { //South: --x
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z - dz));
@@ -169,7 +162,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.WEST) { //West: ++z
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z - dz));
@@ -183,7 +176,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.NORTHEAST) { //Northeast
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             //farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             if (dx >= dz) {
                                 farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
@@ -201,7 +194,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.SOUTHEAST) { //Southeast
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             if (dx >= dz) {
                                 farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             }
@@ -219,7 +212,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.SOUTHWEST) { //Southwest
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             if (dx <= dz) {
                                 farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x - dx, y + dy, z + dz));
@@ -237,7 +230,7 @@ public class AutoHarvester {
             } else if (harvestDir == DIRECTION.NORTHWEST) { //Northwest
                 for (int dx = 0; dx <= plugin.config.autoFarmRange; ++dx) {
                     for (int dz = 0; dz <= plugin.config.autoFarmRange; ++dz) {
-                        for (int dy = plugin.config.autoFarmHeight; dy > -plugin.config.autoFarmHeight; --dy) {
+                        for (int dy = plugin.config.autoFarmHeight; dy >= -plugin.config.autoFarmHeight; --dy) {
                             if (dx <= dz) {
                                 farmBlock(chestBlock, chestBlock.getWorld().getBlockAt(x + dx, y + dy, z + dz));
                             }
@@ -253,6 +246,7 @@ public class AutoHarvester {
                     }
                 }
             }
+            //} while (ChestManip.containsItem(chestBlock, Material.INK_SACK, (short) 15));
         }
     }
 
@@ -278,8 +272,15 @@ public class AutoHarvester {
                     ChestManip.addContents(source, new ItemStack(Material.SEEDS, s));
                 }
                 toFarm.setTypeId(0);
+
+                // now replant
+                if (plugin.config.replant && ChestManip.containsItem(source, Material.SEEDS)) {
+                    toFarm.setTypeId(Material.CROPS.getId());
+                    ChestManip.removeItem(source, Material.SEEDS);
+                }
             }
-        } else if ((id == 2 || id == 3 || id == 60)
+        } else if (plugin.config.replant && plugin.config.autotill
+                && (id == 2 || id == 3 || id == 60)
                 && toFarm.getRelative(BlockFace.UP).getTypeId() == 0
                 && ChestManip.containsItem(source, Material.SEEDS)) {
             if (id != 60 && plugin.config.useHoe) {
@@ -311,11 +312,11 @@ public class AutoHarvester {
                     && !ChestManip.is_full(source, Material.SUGAR_CANE)) {
 
                 ChestManip.addContents(source, new ItemStack(Material.SUGAR_CANE, 1));
-                toFarm.setTypeIdAndData(0, (byte)0, false);//toFarm.setTypeId(0);
+                toFarm.setTypeIdAndData(0, (byte) 0, false);//toFarm.setTypeId(0);
                 while (toFarm.getRelative(BlockFace.UP).getTypeId() == Material.SUGAR_CANE_BLOCK.getId()) {
                     toFarm = toFarm.getRelative(BlockFace.UP);
                     ChestManip.addContents(source, new ItemStack(Material.SUGAR_CANE, 1));
-                    toFarm.setTypeIdAndData(0, (byte)0, false);
+                    toFarm.setTypeIdAndData(0, (byte) 0, false);
                 }
             }
         } else if (plugin.config.harvestCactus
@@ -323,11 +324,11 @@ public class AutoHarvester {
             if (toFarm.getRelative(BlockFace.DOWN).getTypeId() == Material.CACTUS.getId()
                     && !ChestManip.is_full(source, Material.CACTUS)) {
                 ChestManip.addContents(source, new ItemStack(Material.CACTUS, 1));
-                toFarm.setTypeIdAndData(0, (byte)0, false);//toFarm.setTypeId(0);
-            while (toFarm.getRelative(BlockFace.UP).getTypeId() == Material.CACTUS.getId()) {
+                toFarm.setTypeIdAndData(0, (byte) 0, false);//toFarm.setTypeId(0);
+                while (toFarm.getRelative(BlockFace.UP).getTypeId() == Material.CACTUS.getId()) {
                     toFarm = toFarm.getRelative(BlockFace.UP);
                     ChestManip.addContents(source, new ItemStack(Material.CACTUS, 1));
-                    toFarm.setTypeIdAndData(0, (byte)0, false);
+                    toFarm.setTypeIdAndData(0, (byte) 0, false);
                 }
             }
         }

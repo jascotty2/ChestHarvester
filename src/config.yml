@@ -24,8 +24,7 @@ storageCartsCollect: false
 #       doors, carts, saddles, snowballs, boats, eggs, cake, beds, records
 AutoStack: true
 
-# for collecting or harvesting, what worlds (if any)
-#			will not be scanned
+# for collecting or harvesting, what worlds (if any) will not be scanned
 #			(comma-delimited, case insensitive)
 disabledWorlds: 
 
@@ -44,11 +43,17 @@ harvesting:
     #   (if false, will harvest in a box around the chest)
     directional: true
     # if directional, should corners also be a direction? (eg. north-east)
+	# (if false, will only harvest in linear direction - N/E/S/W)
     harvestCorners: true
     # if useBonemeal, will use any bonemeal in the chest to unfinished crops before harvesting
     useBonemeal: true
-    # if new land requires a how to till with
+    # when clicked (if seeds are availiable), should the harvester till new land to plant on?
+    autotill: true
+    # if new land requires a hoe to till with
     useHoe: true
+    # if seeds are replanted after harvesting
+    # (if false, also disables tilling)
+    replant: true
     # if should also be able to harvest sugarcane
     harvestReeds: true
     # if should also be able to farm cactus
