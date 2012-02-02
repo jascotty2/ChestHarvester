@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import me.jascotty2.libv01.bukkit.item.JItem;
 import me.jascotty2.libv01.bukkit.item.JItems;
-import me.jascotty2.libv01.bukkit.item.Kit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

@@ -43,7 +43,7 @@ harvesting:
     #   (if false, will harvest in a box around the chest)
     directional: true
     # if directional, should corners also be a direction? (eg. north-east)
-	# (if false, will only harvest in linear direction - N/E/S/W)
+    # (if false, will only harvest in linear direction - N/E/S/W)
     harvestCorners: true
     # if useBonemeal, will use any bonemeal in the chest to unfinished crops before harvesting
     useBonemeal: true

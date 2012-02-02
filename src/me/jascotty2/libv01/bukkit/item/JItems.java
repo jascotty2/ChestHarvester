@@ -785,7 +785,7 @@ public enum JItems {
 	}
 
 	public static int getMaxStack(ItemStack it) {
-		JItems i = getItem(it.getTypeId(), it.getData() == null ? 0 : it.getData().getData());
+		JItems i = it == null ? null : (getItem(it.getTypeId(), it.getData() == null ? 0 : it.getData().getData()));
 		return i == null ? 64 : i.MaxStackSize();
 	}
 
