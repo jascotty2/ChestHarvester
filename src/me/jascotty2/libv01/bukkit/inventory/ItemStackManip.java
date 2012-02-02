@@ -15,15 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jascotty2;
+package me.jascotty2.libv01.bukkit.inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import me.jascotty2.lib.bukkit.item.JItem;
-import me.jascotty2.lib.bukkit.item.JItemDB;
-import me.jascotty2.lib.bukkit.item.JItems;
-import me.jascotty2.lib.bukkit.item.Kit;
+import me.jascotty2.libv01.bukkit.item.JItem;
+import me.jascotty2.libv01.bukkit.item.JItems;
+import me.jascotty2.libv01.bukkit.item.Kit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,6 +44,14 @@ public class ItemStackManip {
 		return is_full(items, check, false);
 	}
 
+    public static boolean is_full(ItemStack[] items, Material check) {
+        return check != null ? is_full(items, check.getId(), false) : false;
+    }
+
+    public static boolean is_full(ItemStack[] items, Material check, boolean extraStack) {
+        return check != null ? is_full(items, check.getId(), extraStack) : false;
+    }
+	
 	/**
 	 * check if this stack cannot hold one more of this item
 	 * @param items
@@ -62,6 +69,22 @@ public class ItemStackManip {
 					&& (item.getAmount() + amt <= mx))) {
 				return false;
 			} else if (item.getTypeId() == check.getTypeId()) {
+				amt -= mx - item.getAmount();
+			}
+		}
+		return true;
+	}
+
+	public static boolean is_full(ItemStack[] items, int check, boolean extraStack) {
+		int amt = 1;
+		for (ItemStack item : items) {
+			int mx = !extraStack || noStack.contains(item == null ? 0 : item.getTypeId())
+					? JItems.getMaxStack(item) : 64;
+			if (item == null || item.getAmount() == 0
+					|| (item.getTypeId() == check
+					&& (item.getAmount() + amt <= mx))) {
+				return false;
+			} else if (item.getTypeId() == check) {
 				amt -= mx - item.getAmount();
 			}
 		}
@@ -161,59 +184,59 @@ public class ItemStackManip {
 		}
 		return false;
 	}
-
-	public static boolean canHold(ItemStack[] items, JItem check, int amt, boolean extraStack){
-		return amountCanHold(items, check, extraStack) >= amt;
-	}
+//
+//	public static boolean canHold(ItemStack[] items, JItem check, int amt, boolean extraStack){
+//		return amountCanHold(items, check, extraStack) >= amt;
+//	}
 	
-	public static int amountCanHold(ItemStack[] items, JItem check, boolean extraStack) {
-		int amt = 0;
-		if (items == null) {
-			return 0;
-		} else if (check == null) {
-			return emptySlots(items);
-		} else if (check.isEntity()) {
-			return -1;
-		} else if (check.isKit()) {
-			Kit kit = check instanceof Kit ? (Kit) check : JItemDB.getKit(check);
-			Kit.KitItem kititems[] = kit.getKitItems();
-			ItemStack invCopy[] = copy(items);
-			// loop through & "add" one at a time
-			while (true) {
-				int numtoadd = 0;
-				for (int itn = 0; itn < kititems.length; ++itn) {
-					numtoadd = kititems[itn].itemAmount;
-					int maxStack = !extraStack || noStack.contains(kititems[itn].ID()) ? kititems[itn].MaxStackSize() : 64;
-					for (int i = 0; i < invCopy.length && numtoadd > 0; ++i) {
-						if (invCopy[i] == null || invCopy[i].getAmount() == 0) {
-							invCopy[i] = kititems[itn].toItemStack();
-							invCopy[i].setAmount(numtoadd);
-							numtoadd -= numtoadd;
-						} else if (invCopy[i].getAmount() < maxStack && kititems[itn].iequals(invCopy[i])) {
-							int d = maxStack < numtoadd ? maxStack : numtoadd;
-							invCopy[i].setAmount(invCopy[i].getAmount() + d);
-							numtoadd -= d;
-						}
-					}
-					if (numtoadd > 0) {
-						// has scanned through full stack & cannot add more
-						return amt;
-					}
-				}
-				// 1 was added to the copy
-				++amt;
-			}
-		} else {
-			for (ItemStack item : items) {
-				int mx = !extraStack || (item != null && noStack.contains(item.getTypeId())) ? check.MaxStackSize() : 64;
-				if (item == null || item.getAmount() == 0
-						|| (check.equals(item) && item.getAmount() <= mx)) {
-					amt += mx - (item == null ? 0 : item.getAmount());
-				}
-			}
-		}
-		return amt;
-	}
+//	public static int amountCanHold(ItemStack[] items, JItem check, boolean extraStack) {
+//		int amt = 0;
+//		if (items == null) {
+//			return 0;
+//		} else if (check == null) {
+//			return emptySlots(items);
+//		} else if (check.isEntity()) {
+//			return -1;
+//		} else if (check.isKit()) {
+//			Kit kit = check instanceof Kit ? (Kit) check : JItemDB.getKit(check);
+//			Kit.KitItem kititems[] = kit.getKitItems();
+//			ItemStack invCopy[] = copy(items);
+//			// loop through & "add" one at a time
+//			while (true) {
+//				int numtoadd = 0;
+//				for (int itn = 0; itn < kititems.length; ++itn) {
+//					numtoadd = kititems[itn].itemAmount;
+//					int maxStack = !extraStack || noStack.contains(kititems[itn].ID()) ? kititems[itn].MaxStackSize() : 64;
+//					for (int i = 0; i < invCopy.length && numtoadd > 0; ++i) {
+//						if (invCopy[i] == null || invCopy[i].getAmount() == 0) {
+//							invCopy[i] = kititems[itn].toItemStack();
+//							invCopy[i].setAmount(numtoadd);
+//							numtoadd -= numtoadd;
+//						} else if (invCopy[i].getAmount() < maxStack && kititems[itn].iequals(invCopy[i])) {
+//							int d = maxStack < numtoadd ? maxStack : numtoadd;
+//							invCopy[i].setAmount(invCopy[i].getAmount() + d);
+//							numtoadd -= d;
+//						}
+//					}
+//					if (numtoadd > 0) {
+//						// has scanned through full stack & cannot add more
+//						return amt;
+//					}
+//				}
+//				// 1 was added to the copy
+//				++amt;
+//			}
+//		} else {
+//			for (ItemStack item : items) {
+//				int mx = !extraStack || (item != null && noStack.contains(item.getTypeId())) ? check.MaxStackSize() : 64;
+//				if (item == null || item.getAmount() == 0
+//						|| (check.equals(item) && item.getAmount() <= mx)) {
+//					amt += mx - (item == null ? 0 : item.getAmount());
+//				}
+//			}
+//		}
+//		return amt;
+//	}
 
 	public static ItemStack[] remove(ItemStack[] items, ItemStack check) {
 		return remove(items, check, 0);
@@ -323,55 +346,55 @@ public class ItemStackManip {
 		return items;
 	}
 
-	public static ItemStack[] add(ItemStack[] items, JItem toAdd, int amt) {
-		return add(items, toAdd, amt, false);
-	}
+//	public static ItemStack[] add(ItemStack[] items, JItem toAdd, int amt) {
+//		return add(items, toAdd, amt, false);
+//	}
 
-	public static ItemStack[] add(ItemStack[] items, JItem toAdd, int amt, boolean extraStack) {
-		if (items == null) {
-			return null;
-		} else if (toAdd == null) {
-			return items;
-		} else if (toAdd.IsValidItem()) {
-			int mx = !extraStack || noStack.contains(toAdd.ID()) ? toAdd.MaxStackSize() : 64;
-			while(amt > 0){
-				add(items, toAdd.toItemStack(amt > mx ? mx : amt), extraStack);
-				amt -= mx;
-			}
-			return items;
-		} else if (toAdd.isKit()) {
-			Kit kit = toAdd instanceof Kit ? (Kit) toAdd : JItemDB.getKit(toAdd);
-			Kit.KitItem kititems[] = kit.getKitItems();
-
-			// add one of each until fails
-			for (int num = 0; num < amt; ++num) {
-				int numtoadd = 0;
-				for (int itn = 0; itn < kit.numItems(); ++itn) {
-					numtoadd = kititems[itn].itemAmount;
-					int maxStack = !extraStack || noStack.contains(kititems[itn].ID()) ? kititems[itn].MaxStackSize() : 64;
-					for (int i = 0; i < items.length && numtoadd > 0; ++i) {
-						if (items[i] == null || items[i].getAmount() == 0) {
-							items[i] = kititems[itn].toItemStack();
-							items[i].setAmount(numtoadd);
-							numtoadd -= numtoadd;
-						} else if (items[i].getAmount() < maxStack && kititems[itn].iequals(items[i])) {
-							int d = maxStack < numtoadd ? maxStack : numtoadd;
-							items[i].setAmount(items[i].getAmount() + d);
-							numtoadd -= d;
-						}
-					}
-					if (numtoadd > 0) {
-						break;
-					}
-				}
-				if (numtoadd > 0) {
-					//early exit while adding
-					break;
-				}
-			}
-		}
-		return items;
-	}
+//	public static ItemStack[] add(ItemStack[] items, JItem toAdd, int amt, boolean extraStack) {
+//		if (items == null) {
+//			return null;
+//		} else if (toAdd == null) {
+//			return items;
+//		} else if (toAdd.IsValidItem()) {
+//			int mx = !extraStack || noStack.contains(toAdd.ID()) ? toAdd.MaxStackSize() : 64;
+//			while(amt > 0){
+//				add(items, toAdd.toItemStack(amt > mx ? mx : amt), extraStack);
+//				amt -= mx;
+//			}
+//			return items;
+//		} else if (toAdd.isKit()) {
+//			Kit kit = toAdd instanceof Kit ? (Kit) toAdd : JItemDB.getKit(toAdd);
+//			Kit.KitItem kititems[] = kit.getKitItems();
+//
+//			// add one of each until fails
+//			for (int num = 0; num < amt; ++num) {
+//				int numtoadd = 0;
+//				for (int itn = 0; itn < kit.numItems(); ++itn) {
+//					numtoadd = kititems[itn].itemAmount;
+//					int maxStack = !extraStack || noStack.contains(kititems[itn].ID()) ? kititems[itn].MaxStackSize() : 64;
+//					for (int i = 0; i < items.length && numtoadd > 0; ++i) {
+//						if (items[i] == null || items[i].getAmount() == 0) {
+//							items[i] = kititems[itn].toItemStack();
+//							items[i].setAmount(numtoadd);
+//							numtoadd -= numtoadd;
+//						} else if (items[i].getAmount() < maxStack && kititems[itn].iequals(items[i])) {
+//							int d = maxStack < numtoadd ? maxStack : numtoadd;
+//							items[i].setAmount(items[i].getAmount() + d);
+//							numtoadd -= d;
+//						}
+//					}
+//					if (numtoadd > 0) {
+//						break;
+//					}
+//				}
+//				if (numtoadd > 0) {
+//					//early exit while adding
+//					break;
+//				}
+//			}
+//		}
+//		return items;
+//	}
 
 	/**
 	 * add an ItemStack to another
@@ -394,7 +417,7 @@ public class ItemStackManip {
 		}
 		return toAdd;
 	}
-	
+
 	/**
 	 * add an ItemStack to an array
 	 * @param items
@@ -581,11 +604,11 @@ public class ItemStackManip {
 		}
 		return -1;
 	}
-//	/**
-//	 * makes a copy of a minecraft ItemStack as a bukkit ItemStack
-//	 * @param minecraftItemStack
-//	 * @return
-//	 */
+	/**
+	 * makes a copy of a minecraft ItemStack as a bukkit ItemStack
+	 * @param minecraftItemStack
+	 * @return
+	 */
 //	public static ItemStack[] copy(net.minecraft.server.ItemStack[] minecraftItemStack) {
 //		ItemStack[] invCpy = new ItemStack[minecraftItemStack.length];
 //		for (int i = 0; i < minecraftItemStack.length; ++i) {

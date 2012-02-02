@@ -17,8 +17,8 @@
  */
 package com.jascotty2.chestharvester;
 
-import com.jascotty2.ChestManip;
-import com.jascotty2.ItemStackManip;
+import me.jascotty2.libv01.bukkit.inventory.ChestManip;
+import me.jascotty2.libv01.bukkit.inventory.ItemStackManip;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
