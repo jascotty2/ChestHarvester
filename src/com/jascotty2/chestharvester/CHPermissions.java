@@ -17,7 +17,7 @@
  */
 package com.jascotty2.chestharvester;
 
-import com.jascotty2.Str;
+import me.jascotty2.libv01.util.Str;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
