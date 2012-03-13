@@ -44,12 +44,12 @@ public class CHPermissions {
             permissionPlugin = groupManager;
             handler = PermissionHandler.GROUP_MANAGER;
             String version = groupManager.getDescription().getVersion();
-            ChestHarvester.Log("Permissions enabled using: GroupManager v" + version);
+            ChestHarvester.plugin.getLogger().info("Permissions enabled using: GroupManager v" + version);
         } else if (permissions != null/* && permissions.isEnabled()*/) {
             permissionPlugin = permissions;
             handler = PermissionHandler.PERMISSIONS;
             String version = permissions.getDescription().getVersion();
-            ChestHarvester.Log("Permissions enabled using: Permissions v" + version);
+            ChestHarvester.plugin.getLogger().info("Permissions enabled using: Permissions v" + version);
         } else {
             handler = PermissionHandler.NONE;
             //ChestHarvester.Log("No permission plugin loaded.");
@@ -72,7 +72,7 @@ public class CHPermissions {
             }
         } catch (Exception ex) {
             if (!permErr) {
-                ChestHarvester.Log(Level.SEVERE, "Unexpected Error checking permission: defaulting to builtin", ex);
+                ChestHarvester.plugin.getLogger().log(Level.SEVERE, "Unexpected Error checking permission: defaulting to builtin", ex);
                 permErr = true;
             }
             return true;
@@ -88,7 +88,7 @@ public class CHPermissions {
             }
             return false;
         } catch (Exception e) {
-            ChestHarvester.Log(Level.SEVERE, "Error checking permission..", e);
+            ChestHarvester.plugin.getLogger().log(Level.SEVERE, "Error checking permission..", e);
         }
         return false;
     }

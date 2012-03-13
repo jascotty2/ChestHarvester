@@ -17,8 +17,6 @@
  */
 package com.jascotty2.chestharvester;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import me.jascotty2.bettershop.BetterShop;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -28,19 +26,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ChestHarvester extends JavaPlugin {
 
-    protected static Logger logger = null;
+	protected static ChestHarvester plugin;
     CHConfig config = new CHConfig(this);
     CollectorScanner chestScan = new CollectorScanner(this);
     AutoHarvester harvester = new AutoHarvester(this);
     CHPlayerListener playerListener = new CHPlayerListener(this);
     protected BetterShop betterShopPlugin = null;
 
+	@Override
     public void onEnable() {
-
-        logger = getLogger();
+		plugin = this;
 
         if (!config.load()) {
-            Log("Error loading the configuration file: check for syntax errors");
+            getLogger().warning("Error loading the configuration file: check for syntax errors");
         }
 
         CHPermissions.initialize(getServer());
@@ -55,10 +53,9 @@ public class ChestHarvester extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(playerListener, this);
-
-        Log("Version " + this.getDescription().getVersion() + " enabled");
     }
 
+	@Override
     public void onDisable() {
         chestScan.cancel();
     }
@@ -89,26 +86,6 @@ public class ChestHarvester extends JavaPlugin {
             }
         }
         return true;
-    }
-
-    public static void Log(String txt) {
-        logger.log(Level.INFO, txt);
-    }
-
-    public static void Log(Level loglevel, String txt) {
-        logger.log(loglevel, txt);
-    }
-
-    public static void Log(Level loglevel, String txt, Throwable err) {
-        if (txt == null) {
-            Log(loglevel, err);
-        } else {
-            logger.log(loglevel, txt, err);
-        }
-    }
-
-    public static void Log(Level loglevel, Throwable err) {
-        logger.log(loglevel, err == null ? "? unknown exception ?" : err.getMessage(), err);
     }
 } // end class ChestHarvester
 

@@ -30,6 +30,11 @@ make player manually set a chest for it to collect items?
 Changelog: 
 
 
+Version 1.3.3 - 3/13/12
+updated for new bukkit build
+fixed multi-chest scan bug
+
+
 Version 1.3.2.2 - 2/2/12
 fixed a tab char in default config :/
 fixed error a library null pointer error 
