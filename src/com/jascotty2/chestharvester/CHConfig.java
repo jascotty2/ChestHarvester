@@ -33,6 +33,7 @@ public class CHConfig {
 	public boolean chestAutoCollect = true,
 			autoStack = false,
 			manualHarvest = true,
+			redstoneHarvest = false,
 			harvestPermission = false,
 			directionalHarvest = true,
 			useBonemeal = true,
@@ -46,7 +47,8 @@ public class CHConfig {
 			harvestPumpkins = true,
 			harvestMelons = true,
 			allDirections = false,
-			storageCartsCollect = false;
+			storageCartsCollect = false,
+			storageCartsEmpty = false;
 	public long chestScanInterval = 5000, // every 5 seconds
 			minFarmWait = 2000; // min. wait before will run autofarm again for a given chest
 	public int autoFarmRange = 5,
@@ -75,8 +77,10 @@ public class CHConfig {
 			allDirections = config.getBoolean("scanFull", allDirections);
 			scanRange = config.getInt("scanDistance", scanRange);
 			storageCartsCollect = config.getBoolean("storageCartsCollect", storageCartsCollect);
+			storageCartsEmpty = config.getBoolean("storageCartsEmpty", storageCartsEmpty);
 			autoStack = config.getBoolean("AutoStack", autoStack);
 			manualHarvest = config.getBoolean("ManualHarvest", manualHarvest);
+			redstoneHarvest = config.getBoolean("RedstoneHarvest", redstoneHarvest);
 			harvestPermission = config.getBoolean("ManualHarvestPermissions", harvestPermission);
 			chestScanInterval = config.getInt("AutoCollectScanInterval", (int) chestScanInterval / 1000) * 1000;
 			minFarmWait = config.getInt("ManualHarvestWaitInterval", (int) minFarmWait / 1000) * 1000;

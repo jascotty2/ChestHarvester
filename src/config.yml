@@ -18,6 +18,9 @@ scanDistance: 1
 
 # if storage minecarts should colleact, too
 storageCartsCollect: false
+# if chests should empty storage minecarts traveling by
+storageCartsEmpty: false
+
 
 # if normally unstackables should stack
 #   stacks: apples, bows, bread, pork, cookedpork, fish, cookedfish, signs, 
@@ -30,6 +33,8 @@ disabledWorlds:
 
 # when a chest is clicked, should it harvest the nearby area?
 ManualHarvest: true
+# if chests should harvest when activated by redstone
+RedstoneHarvest: false
 # min. wait before can farm again for a given chest (seconds)
 ManualHarvestWaitInterval: 2
 # if permissions are use for harvesting (ChestHarvester.harvest)

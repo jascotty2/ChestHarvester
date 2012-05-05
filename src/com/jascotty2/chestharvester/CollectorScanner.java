@@ -32,6 +32,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.StorageMinecart;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class CollectorScanner implements Runnable {
@@ -83,8 +84,10 @@ public class CollectorScanner implements Runnable {
 				if (plugin.config.disabledWorlds.contains(w)) {
 					continue;
 				}
-				for (Item item : world.getEntitiesByClass(Item.class)) {
-					for (Block block : getScanBlocks(item.getLocation().getBlock())) {
+				for (Entity e : ChestHarvester.plugin.config.storageCartsEmpty 
+						? world.getEntitiesByClasses(Item.class, StorageMinecart.class)
+						: world.getEntitiesByClass(Item.class)) {
+					for (Block block : getScanBlocks(e.getLocation().getBlock())) {
 						if (block.getType() == Material.CHEST) {
 							if (plugin.betterShopPlugin != null
 									&& BetterShop.getSettings().chestShopEnabled
@@ -95,16 +98,41 @@ public class CollectorScanner implements Runnable {
 							ItemStack is[] = chests.get(block);
 							if (is == null) {
 								is = ((Chest) block.getState()).getInventory().getContents();//ChestManip.getContents((Chest) block.getState());
+								for(int i = 0; i < is.length; ++i) {
+									if(is[i] == null) {
+										is[i] = new ItemStack(0, 0);
+									}
+								}
 								chests.put(block, is);
 							}
+							if (e instanceof Item) {
+								Item item = (Item) e;
 //                            mvd += item.getItemStack().getAmount();
-							ItemStack no = ItemStackManip.add(is, item.getItemStack(), autoStack);
-							if (no.getAmount() == 0) {
-								item.remove();
-								break;
-							} else {
-								item.setItemStack(no);
-								// mvd -= no.getAmount();
+								ItemStack no = ItemStackManip.add(is, item.getItemStack(), autoStack);
+								if (no.getAmount() == 0) {
+									item.remove();
+									break;
+								} else {
+									item.setItemStack(no);
+									// mvd -= no.getAmount();
+								}
+							} else { // is a StorageMinecart
+								StorageMinecart cart = (StorageMinecart) e;
+								Inventory inv = cart.getInventory();
+								for(int i = 0; i < inv.getSize(); ++i) {
+									ItemStack item = inv.getItem(i);
+									if(item != null && item.getAmount() > 0 
+											&& ItemStackManip.amountCanHold(is, item, autoStack) > 0) {
+										ItemStack no = ItemStackManip.add(is, item, autoStack);
+										if (no.getAmount() == 0) {
+											item.setAmount(0);
+											inv.setItem(i, null);
+										} else {
+											item.setAmount(no.getAmount());	
+											inv.setItem(i, item);
+										}
+									}
+								}
 							}
 						}
 					}

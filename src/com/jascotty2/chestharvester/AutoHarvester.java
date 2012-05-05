@@ -27,13 +27,20 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class AutoHarvester {
+public class AutoHarvester implements Listener {
 
     ChestHarvester plugin = null;
     static HashMap<Location, Long> farmTimes = new HashMap<Location, Long>();
-
+	// where to look for chests relative to the redstone wire
+	static final BlockFace dirs[] = new BlockFace[]{
+		BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.UP};
+	
     enum DIRECTION {
 
         NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
@@ -348,5 +355,21 @@ public class AutoHarvester {
             }
         }
     }
+	
+    @EventHandler(priority = EventPriority.HIGHEST)
+	public void onRedstoneEvent(BlockRedstoneEvent event) {
+		if (ChestHarvester.plugin.config.redstoneHarvest
+				&& event.getNewCurrent() > 0
+				&& event.getNewCurrent() != event.getOldCurrent()){
+			for(BlockFace bf : dirs) {
+				Block b = event.getBlock().getRelative(bf);
+				if(b.getType() == Material.CHEST) {
+					autoFarm((Chest) b.getState());
+				}
+			}
+			
+		}
+	}
+	
 }// end class AutoHarvester
 

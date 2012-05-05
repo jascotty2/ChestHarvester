@@ -183,20 +183,21 @@ public class ItemStackManip {
 		}
 		return false;
 	}
-//
-//	public static boolean canHold(ItemStack[] items, JItem check, int amt, boolean extraStack){
-//		return amountCanHold(items, check, extraStack) >= amt;
-//	}
+
+	public static boolean canHold(ItemStack[] items, JItem check, int amt, boolean extraStack){
+		return amountCanHold(items, check, extraStack) >= amt;
+	}
 	
-//	public static int amountCanHold(ItemStack[] items, JItem check, boolean extraStack) {
-//		int amt = 0;
-//		if (items == null) {
-//			return 0;
-//		} else if (check == null) {
-//			return emptySlots(items);
-//		} else if (check.isEntity()) {
-//			return -1;
-//		} else if (check.isKit()) {
+	public static int amountCanHold(ItemStack[] items, JItem check, boolean extraStack) {
+		int amt = 0;
+		if (items == null) {
+			return 0;
+		} else if (check == null) {
+			return emptySlots(items);
+		} else if (check.isEntity()) {
+			return -1;
+		}
+//		else if (check.isKit()) {
 //			Kit kit = check instanceof Kit ? (Kit) check : JItemDB.getKit(check);
 //			Kit.KitItem kititems[] = kit.getKitItems();
 //			ItemStack invCopy[] = copy(items);
@@ -225,17 +226,36 @@ public class ItemStackManip {
 //				// 1 was added to the copy
 //				++amt;
 //			}
-//		} else {
-//			for (ItemStack item : items) {
-//				int mx = !extraStack || (item != null && noStack.contains(item.getTypeId())) ? check.MaxStackSize() : 64;
-//				if (item == null || item.getAmount() == 0
-//						|| (check.equals(item) && item.getAmount() <= mx)) {
-//					amt += mx - (item == null ? 0 : item.getAmount());
-//				}
-//			}
 //		}
-//		return amt;
-//	}
+		else {
+			int max = !extraStack || noStack.contains(check.ID()) ? check.MaxStackSize() : 64;
+			for (ItemStack item : items) {
+				if (item == null || item.getAmount() == 0
+						|| (check.equals(item) && item.getAmount() <= max)) {
+					amt += max - (item == null ? 0 : item.getAmount());
+				}
+			}
+		}
+		return amt;
+	}
+	
+	public static int amountCanHold(ItemStack[] items, ItemStack check, boolean extraStack) {
+		int amt = 0;
+		if (items == null) {
+			return 0;
+		} else if (check == null) {
+			return emptySlots(items);
+		} else {
+			int max = !extraStack || noStack.contains(check.getTypeId()) ? JItems.getMaxStack(check) : 64;
+			for (ItemStack item : items) {
+				if (item == null || item.getAmount() == 0
+						|| (check.equals(item) && item.getAmount() <= max)) {
+					amt += max - (item == null ? 0 : item.getAmount());
+				}
+			}
+		}
+		return amt;
+	}
 
 	public static ItemStack[] remove(ItemStack[] items, ItemStack check) {
 		return remove(items, check, 0);
@@ -431,7 +451,8 @@ public class ItemStackManip {
 		boolean firstRun = true;
 		for (int i = 0; i < items.length; ++i) {
 			if (!firstRun && (items[i] == null || items[i].getAmount() == 0)) {
-				items[i] = toAdd;
+				if(items[i] == null) items[i] = toAdd;
+				else items[i].setTypeId(toAdd.getTypeId());
 				items[i].setAmount(ret.getAmount());
                 ret.setAmount(0);
 				return ret;

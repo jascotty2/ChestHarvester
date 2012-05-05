@@ -53,6 +53,7 @@ public class ChestHarvester extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(playerListener, this);
+        getServer().getPluginManager().registerEvents(harvester, this);
     }
 
 	@Override
