@@ -23,6 +23,7 @@ import java.util.List;
 import me.jascotty2.libv01.bukkit.item.JItem;
 import me.jascotty2.libv01.bukkit.item.JItems;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemStackManip {
@@ -451,14 +452,20 @@ public class ItemStackManip {
 		boolean firstRun = true;
 		for (int i = 0; i < items.length; ++i) {
 			if (!firstRun && (items[i] == null || items[i].getAmount() == 0)) {
-				if(items[i] == null) items[i] = toAdd;
-				else items[i].setTypeId(toAdd.getTypeId());
+				if(items[i] == null) {
+					items[i] = toAdd;
+				} else {
+					items[i].setTypeId(toAdd.getTypeId());
+					items[i].setDurability(toAdd.getDurability());
+					items[i].addEnchantments(toAdd.getEnchantments());
+				}
 				items[i].setAmount(ret.getAmount());
                 ret.setAmount(0);
 				return ret;
 			} else if (items[i] != null 
 					&& items[i].getTypeId() == toAdd.getTypeId() 
-					&& (!JItems.hasData(toAdd.getTypeId()) || items[i].getData().getData() == toAdd.getData().getData())
+					&& items[i].getDurability() == toAdd.getDurability() //(!JItems.hasData(toAdd.getTypeId()) || items[i].getData().getData() == toAdd.getData().getData())
+					&& sameEnchants(items[i], toAdd)
 					&& items[i].getAmount() < mx) {
 				// on first run, look for other stacks in array that could be incremented instead
 				if (items[i].getAmount() + ret.getAmount() <= mx) {
@@ -475,6 +482,18 @@ public class ItemStackManip {
 			}
 		}
 		return ret;
+	}
+	
+	private static boolean sameEnchants(ItemStack a, ItemStack b) {
+		if(a.getEnchantments().size() == b.getEnchantments().size()) {
+			for(Enchantment e : a.getEnchantments().keySet()) {
+				if(!b.containsEnchantment(e) || b.getEnchantmentLevel(e) != a.getEnchantmentLevel(e)) {
+					return false;	
+				}
+			}
+			return true;	
+		}
+		return false;
 	}
 
 	/**

@@ -35,6 +35,12 @@ disabledWorlds:
 ManualHarvest: true
 # if chests should harvest when activated by redstone
 RedstoneHarvest: false
+# number of times a chest can be activated within ManualHarvestWaitInterval before becomes overloaded (0 - disable overload)
+RedstoneOverload: 1
+# what to do when overloaded
+# wait:  cannot harvest for 10x the interval period (default)
+# explode: chest explodes ;)
+RedstoneOverloadAction: wait
 # min. wait before can farm again for a given chest (seconds)
 ManualHarvestWaitInterval: 2
 # if permissions are use for harvesting (ChestHarvester.harvest)
@@ -70,3 +76,5 @@ harvesting:
     harvestPumpkins: true
     # if should be able to harvest melons
     harvestMelons: true
+    # harvest nether warts?
+    harvestWarts: true

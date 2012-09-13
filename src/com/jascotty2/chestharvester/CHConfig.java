@@ -45,7 +45,8 @@ public class CHConfig {
 			harvestReeds = true,
 			harvestCactus = true,
 			harvestPumpkins = true,
-			harvestMelons = true,
+			harvestMelons = true,			
+			harvestWarts = true,
 			allDirections = false,
 			storageCartsCollect = false,
 			storageCartsEmpty = false;
@@ -53,7 +54,9 @@ public class CHConfig {
 			minFarmWait = 2000; // min. wait before will run autofarm again for a given chest
 	public int autoFarmRange = 5,
 			autoFarmHeight = 1,
-			scanRange = 1;
+			scanRange = 1,
+			redstoneOverload = 1;
+	public OverloadAction redstoneOverloadAction = OverloadAction.WAIT;
 	protected ArrayList<String> disabledWorlds = new ArrayList<String>();
 	private ChestHarvester plugin;
 
@@ -84,6 +87,13 @@ public class CHConfig {
 			harvestPermission = config.getBoolean("ManualHarvestPermissions", harvestPermission);
 			chestScanInterval = config.getInt("AutoCollectScanInterval", (int) chestScanInterval / 1000) * 1000;
 			minFarmWait = config.getInt("ManualHarvestWaitInterval", (int) minFarmWait / 1000) * 1000;
+			redstoneOverload = config.getInt("RedstoneOverload", 1);
+			String overloadAction = config.getString("RedstoneOverloadAction", "");
+			if(overloadAction.equalsIgnoreCase("explode")) {
+				redstoneOverloadAction = OverloadAction.EXPLODE;
+			} else {
+				redstoneOverloadAction = OverloadAction.WAIT;
+			}
 			Object v = config.get("harvesting");
 			if (v instanceof MemorySection) {
 				MemorySection n = (MemorySection) v;
@@ -99,7 +109,8 @@ public class CHConfig {
 				harvestReeds = n.getBoolean("harvestReeds", harvestReeds);
 				harvestCactus = n.getBoolean("harvestCactus", harvestCactus);
 				harvestPumpkins = n.getBoolean("harvestPumpkins", harvestPumpkins);
-				harvestMelons = n.getBoolean("harvestMelons", harvestMelons);
+				harvestMelons = n.getBoolean("harvestMelons", harvestMelons);				
+				harvestWarts = n.getBoolean("harvestWarts", harvestWarts);
 			}
 			disabledWorlds.clear();
 			String wlds = config.getString("disabledWorlds");
@@ -150,6 +161,11 @@ public class CHConfig {
 				}
 			}
 		}
+	}
+	
+	public static enum OverloadAction {
+		WAIT,
+		EXPLODE
 	}
 } // end class CHConfig
 

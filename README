@@ -13,7 +13,11 @@ supports double-chests!
 to minimize server strain, scans every 5 seconds & only allows farming every 2
 (this can be changed with "AutoCollectScanInterval" and "ManualHarvestWaitInterval" in the config)
 can be set to use a hoe to till new farmland
-can harvest sugarcane & cactus, not just farmland :)
+can harvest sugarcane, cactus, pumpkins, melons, and netherwart.. not just farmland :)
+can be activated by redstone
+- also has an overload setting, to discourage redstone clocks
+- default is wait - if activated by redstone more than twice within the wait period, will not harvest again until pulse stops for 10 times the wait time
+- also can optionally cause the chest to explode ;)
 
 Permissions: 
 ChestHarvester.harvest		for a user to be able to click on a chest for it to harvest 
@@ -24,14 +28,24 @@ TODO:
 iConomy support?
 Autoharvest, so chests run automatically?
 "special block" must be on to operate?
-run chests on redstone?
 make player manually set a chest for it to collect items?
 
 Changelog: 
 
-Version 1.3.4
+Version 1.3.4 - 9/13/12
+added netherwart to harvested items
 added option for storage chests to dump their contents into a chest
 added option for harvesting to be activated by redstone
+- also added overload setting, to discourage redstone clocks
+- default is wait - if activated by redstone more than twice within the wait period, will not harvest again until pulse stops for 10 times the wait time
+- also can optionally cause the chest to explode ;)
+fixed items sometimes not being added to chests
+fixed chests changing potions into water bottles
+fixed items loosing enchantments
+added plugin metrics so i can get an idea of how many use this plugin
+- is you have it disabled, please re-enable it - i won't work on this as much if less people use it
+- (most-used plugins will be updated first)
+- can be seen here: https://mcstats.org/plugin/ChestHarvester
 
 
 Version 1.3.3 - 3/13/12
