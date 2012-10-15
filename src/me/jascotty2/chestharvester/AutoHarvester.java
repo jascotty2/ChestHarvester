@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jascotty2.chestharvester;
+package me.jascotty2.chestharvester;
 
-import me.jascotty2.libv01.bukkit.inventory.ChestManip;
-import me.jascotty2.libv01.util.Rand;
 import java.util.HashMap;
-import me.jascotty2.libv01.bukkit.inventory.ItemStackManip;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,6 +30,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.inventory.ItemStack;
+
+import me.jascotty2.libv01.bukkit.inventory.ChestManip;
+import me.jascotty2.libv01.bukkit.inventory.ItemStackManip;
+import me.jascotty2.libv01.util.Rand;
 
 public class AutoHarvester implements Listener {
 

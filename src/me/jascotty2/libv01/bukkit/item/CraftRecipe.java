@@ -18,7 +18,7 @@
  */
 package me.jascotty2.libv01.bukkit.item;
 
-import me.jascotty2.lib.io.CheckInput;
+import me.jascotty2.libv2.io.CheckInput;
 import java.util.LinkedList;
 
 public class CraftRecipe { //  extends Kit

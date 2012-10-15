@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jascotty2.chestharvester;
+package me.jascotty2.chestharvester;
 
 import org.bukkit.Material;
 import org.bukkit.block.Chest;

@@ -10,9 +10,11 @@ Features:
 chests can collect drops within a 1-block radius on the faces or from the top
 clicking on a chest will farm the surrounding area, or in the direction the player is looking, if enabled
 supports double-chests!
+can also collect into storage minecarts
 to minimize server strain, scans every 5 seconds & only allows farming every 2
 (this can be changed with "AutoCollectScanInterval" and "ManualHarvestWaitInterval" in the config)
 can be set to use a hoe to till new farmland
+can be disabled per-world
 can harvest sugarcane, cactus, pumpkins, melons, and netherwart.. not just farmland :)
 can be activated by redstone
 - also has an overload setting, to discourage redstone clocks
@@ -31,6 +33,10 @@ Autoharvest, so chests run automatically?
 make player manually set a chest for it to collect items?
 
 Changelog: 
+
+Version 1.3.5 - 10/15/12
+items are now absorbed into the nearest chest/cart
+fixed duplication bug with storage carts
 
 Version 1.3.4 - 9/13/12
 added netherwart to harvested items

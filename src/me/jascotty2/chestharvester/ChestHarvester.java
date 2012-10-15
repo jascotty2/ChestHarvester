@@ -15,16 +15,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jascotty2.chestharvester;
+package me.jascotty2.chestharvester;
 
 import java.io.IOException;
-import me.jascotty2.bettershop.BetterShop;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
+
+import me.jascotty2.bukkit.bettershop3.BetterShop3;
 
 public class ChestHarvester extends JavaPlugin {
 
@@ -33,7 +35,7 @@ public class ChestHarvester extends JavaPlugin {
 	CollectorScanner chestScan = new CollectorScanner(this);
 	AutoHarvester harvester = new AutoHarvester(this);
 	CHPlayerListener playerListener = new CHPlayerListener(this);
-	protected BetterShop betterShopPlugin = null;
+	protected BetterShop3 betterShopPlugin = null;
 
 	@Override
 	public void onEnable() {
@@ -49,9 +51,9 @@ public class ChestHarvester extends JavaPlugin {
 			chestScan.start(config.chestScanInterval);
 		}
 
-		Plugin bs = getServer().getPluginManager().getPlugin("BetterShop");
-		if (bs instanceof BetterShop && bs.getDescription().getVersion().startsWith("3")) {
-			betterShopPlugin = (BetterShop) bs;
+		Plugin bs = getServer().getPluginManager().getPlugin("BetterShop3");
+		if (bs instanceof BetterShop3) {
+			betterShopPlugin = (BetterShop3) bs;
 		}
 
 		getServer().getPluginManager().registerEvents(playerListener, this);

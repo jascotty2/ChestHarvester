@@ -15,16 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jascotty2.chestharvester;
+package me.jascotty2.chestharvester;
 
-import me.jascotty2.libv01.util.Str;
+import java.util.logging.Level;
+
+import com.nijikokun.bukkit.Permissions.Permissions;
+import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.logging.Level;
-import com.nijikokun.bukkit.Permissions.Permissions;
-import org.anjocaido.groupmanager.GroupManager;
+import me.jascotty2.libv01.util.Str;
 
 public class CHPermissions {
 
