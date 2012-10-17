@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -40,7 +39,6 @@ import org.bukkit.inventory.ItemStack;
 public class CollectorScanner implements Runnable {
 
 	public long interval = 1000;
-	public boolean autoStack = true;
 	private int taskID = -1;
 	ChestHarvester plugin;
 
@@ -49,7 +47,6 @@ public class CollectorScanner implements Runnable {
 	}
 
 	public void start() {
-		autoStack = plugin.config.autoStack;
 		start(interval);
 	}
 
@@ -120,7 +117,7 @@ public class CollectorScanner implements Runnable {
 						}
 						if (e instanceof Item) {
 							Item item = (Item) e;
-							ItemStack no = ItemStackManip.add(is, item.getItemStack(), autoStack);
+							ItemStack no = ItemStackManip.add(is, item.getItemStack(), plugin.config.autoStack);
 							if (no.getAmount() == 0) {
 								item.remove();
 							} else {
@@ -132,8 +129,8 @@ public class CollectorScanner implements Runnable {
 							for (int i = 0; i < inv.getSize(); ++i) {
 								ItemStack item = inv.getItem(i);
 								if (item != null && item.getAmount() > 0
-										&& ItemStackManip.amountCanHold(is, item, autoStack) > 0) {
-									ItemStack no = ItemStackManip.add(is, item, autoStack);
+										&& ItemStackManip.amountCanHold(is, item, plugin.config.autoStack) > 0) {
+									ItemStack no = ItemStackManip.add(is, item, plugin.config.autoStack);
 									if (no.getAmount() == 0) {
 										item.setAmount(0);
 										inv.setItem(i, null);
@@ -163,7 +160,7 @@ public class CollectorScanner implements Runnable {
 								inv = closestCart.getInventory().getContents();
 								carts.put(closestCart, inv);
 							}
-							ItemStack no = ItemStackManip.add(inv, ((Item) e).getItemStack(), autoStack);
+							ItemStack no = ItemStackManip.add(inv, ((Item) e).getItemStack(), plugin.config.autoStack);
 							((Item) e).setItemStack(no);
 							if (no.getAmount() == 0) {
 								e.remove();
